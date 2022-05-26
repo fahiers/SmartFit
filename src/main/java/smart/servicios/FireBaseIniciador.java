@@ -19,7 +19,7 @@ public class FireBaseIniciador {
 	public void iniciador(){
 		FileInputStream serviceAccount;
 		try {
-			serviceAccount = new FileInputStream("./serviceAccountKey.json");
+			serviceAccount = new FileInputStream("./serviceAccountKeyG5.json");
 			FirebaseOptions options;
 			try {
 				options = new FirebaseOptions.Builder()

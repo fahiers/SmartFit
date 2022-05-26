@@ -1,0 +1,18 @@
+#formCrearUsuario{
+	background-color: var(--naranjoSmart);
+	border-color: var(--grisSmart);
+	border-style: solid;
+	border-width: 10px;
+	border-radius:20px;
+	color: #000000;
+	margin-top:2%;
+}
+#addUserP{
+	color:var(--grisSmart);
+	font-size: 30px;
+	margin: 2% 0% 2% 30%;
+}
+#btnSend{
+	margin: 2% 0% 2% 30%;
+	font-size: 30px;
+}

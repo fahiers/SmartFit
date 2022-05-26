@@ -1,0 +1,18 @@
+#imgHome {
+    opacity: 0.5;
+}
+#imgHome:hover {
+    opacity: 1.0;  
+}
+
+#imgBtnHome{
+    margin-left: 40%;
+    margin-top: 8%;
+    max-width: 60%;
+}
+.btnHome{
+    width: 180px;
+}
+.filaHome{
+    margin-top: 45px;
+}

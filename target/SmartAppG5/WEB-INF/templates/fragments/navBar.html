@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<link th:href="@{resource/css/navBar.css}" rel="stylesheet" th:fragment="cssHeader"/>
+  </head>
+  <body>
+    <div th:fragment="navBar">
+    	 <input type="hidden" id="pagina" th:value="${pagina}">
+		<div class="container-xxl"  id="navBar">
+			<div class="row">
+				<div class="col-12">
+					<img th:src="@{resource/img/logos/smartApp.png}" alt="thFoto" height="50px" id="logo"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<ul id="ulNavBar" class="nav nav-tabs">
+						<li class="nav-item itemNav">
+					    <a id="navLinkHome" class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+					 	</li>
+					  	<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkUsers" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Usuarios</a>
+					    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+					      <li><a class="dropdown-item internItemDrop" th:href="@{/usuarios/crearUsuario}">Crear Usuario</a></li>
+					      <li><hr class="dropdown-divider"></li>
+					      <li><a class="dropdown-item internItemDrop" href="#">Ver Usuarios</a></li>
+					      <li><hr class="dropdown-divider"></li>
+					      <li><a class="dropdown-item internItemDrop" href="#">Crear Administrador</a></li>
+					    </ul>
+						</li>
+						<li class="nav-item itemNav ">
+						  <a id="navLinkSedes" class="nav-link itemNavLink" href="#">Sedes</a>
+						</li>
+						<li class="nav-item itemNav ">
+						  <a id="navLinkPlanes" class="nav-link itemNavLink" href="#">Planes</a>
+						</li>
+						<li class="nav-item itemNav ">
+						  <a id="navLinkClases" class="nav-link itemNavLink" href="#">Clases</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-6" id="divMsgWelcome">
+					<label id="msgWelcome" th:text="${'¡Bienvenido ' + #strings.capitalize(usuario.nombre) + ' ' + #strings.capitalize(usuario.apellido) + '!'}"/>
+					<img th:src="@{resource/img/userDefault.png}" alt="thFoto" height="30px" id="fotoUser"/>
+				</div>
+			</div>
+		</div>
+    </div>
+  </body>
+</html>

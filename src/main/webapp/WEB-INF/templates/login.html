@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		<link th:href="@{resource/css/bootstrap.min.css}" rel="stylesheet"/>
+		<script th:src="@{resource/js/popper.min.js}"></script>
+		<script th:src="@{resource/js/bootstrap.min.js}"></script>
+		<link th:href="@{resource/css/main.css}" rel="stylesheet"/>
+		<link th:href="@{resource/css/login.css}" rel="stylesheet"/>
+		<title>SmartApp</title>
+	</head>
+	<body class="backgroundSmart">
+		<div id="cuadroLogin">
+			<form th:action="@{/login}" method="post" id="form" onsubmit="setUsername();" class="container formLog">
+			    <input type="hidden" value="" id="hidden" name="username">
+			    <div class="col-5">
+				    <div class="col centroForm">
+						<p id="loginText">Login</p>
+				    </div>
+				</div>
+				<div class="row">
+					<p class="col-2">Nombre</p> <input type="text" id="nom" class="col-4 sizeInput" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Apellido</p> <input type="text" id="sur" class="col-4 sizeInput" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Rut</p> <input type="text" id="rut"  class="col-4 sizeInput" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Password</p> <input type="password" name="password" class="col-4 sizeInput" required />
+				</div>
+				<div class="col-5">
+			    		<input type="submit" class="col centroForm btn btn-warning" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+	<script type="text/javascript" th:replace="fragments/scripts :: scripts"></script>
+</html>

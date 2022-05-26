@@ -1,0 +1,13 @@
+#tablaUsuarios{
+	max-width:60%;
+	margin-left:20%;
+	border: 5px solid var(--grisSmart);
+}
+#cuadroUsuarios{
+	text-align: center;
+}
+#verUsersP{
+	margin-top: 2%;
+	color:var(--grisSmart);
+	font-size: 50px;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div id="cuadroLogin" th:fragment="crearUsuario" >
+		<link th:href="@{resource/css/usuarios/crearUsuario.css}" rel="stylesheet"/>
+			<form th:action="@{/usuarios/addUser}" method="post" id="formCrearUsuario" onsubmit="setRolesyPermisos();" th:object="${newUser}" class="container cuadroBNS col-5">
+				<div class="row">
+					<p id="addUserP" class="col">Añadir Usuario</p>
+				</div>
+				<div class="row">
+					<p class="col-2">Nombre</p> <input type="text" class="col-8" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Apellido</p> <input type="text" class="col-8" th:field="*{apellido}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Correo</p> <input type="text" class="col-8" th:field="*{correo}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Rut</p> <input type="text" class="col-8" th:field="*{rut}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Password</p> <input type="password" name="password" th:field="*{password}" class="col-8" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Estado</p>
+					<select th:field="*{activo}" class="col-8">
+					    <option th:value="'false'" th:text="Inactivo"></option>
+					    <option th:value="'true'" th:text="Activo"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Roles</p>
+			    	<div class="form-check col-3">
+					  <input class="form-check-input" type="checkbox" value="ADMIN" id="checkAdmin">
+					  <label class="form-check-label" for="flexCheckDefault">Administrador</label>
+					 </div>
+			    	<div class="form-check col-3">
+					  <input class="form-check-input" type="checkbox" value="ENTRENADOR" id="checkTrainer">
+					  <label class="form-check-label" for="flexCheckDefault">Entrenador</label>
+					 </div>
+			    	<div class="form-check col-3">
+					  <input class="form-check-input" type="checkbox" value="PERSONALDTI" id="checkDTI">
+					  <label class="form-check-label" for="flexCheckDefault">Personal DTI</label>
+					</div>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Permisos</p>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="MOSTRAR" id="checkPYC">
+					  <label class="form-check-label" for="flexCheckDefault">Mostrar Planes y Clases</label>
+					</div>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="USUARIOS" id="checkADU">
+					  <label class="form-check-label" for="flexCheckDefault">Administrar Usuarios</label>
+			    	</div>
+					 <div class="col-2">
+					 </div>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="SEDES" id="checkSEDE">
+					  <label class="form-check-label" for="flexCheckDefault">Administrar Sedes</label>
+			    	</div>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="SALA_LVL1" id="checkSALA">
+					  <label class="form-check-label" for="flexCheckDefault">Ocupar y Liberar Sala</label>
+			    	</div>
+					 <div class="col-2">
+					 </div>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="SALA_LVL2" id="checkSALA2">
+					  <label class="form-check-label" for="flexCheckDefault">Deshabilitar Salas</label>
+			    	</div>
+			    	<div class="form-check col-5">
+					  <input class="form-check-input" type="checkbox" value="EXTRAS" id="checkADPYC">
+					  <label class="form-check-label" for="flexCheckDefault">Administrar Planes y Clases</label>
+					</div>
+				</div>
+				<input id="rolId" type="hidden" name="roles" th:field="*{roles}" class="col-8" value=""/>
+				<input id="permId" type="hidden" name="permisos" th:field="*{permisos}" class="col-8" value=""/>
+				<div class="col">
+			    		<input type="submit" class="col centroForm btn btn-dark" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

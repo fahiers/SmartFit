@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<script th:fragment="scripts" >
+	/*<![CDATA[*/
+		function setUsername(){
+			   document.getElementById('hidden').value = 
+				   (document.getElementById('rut').value+':'+
+				   document.getElementById('nom').value+':'+
+				   document.getElementById('sur').value).toLowerCase();
+		}
+	
+		function setRolesyPermisos(){
+			var roles= "[ ";
+			var permisos ="[ ";
+			if(document.getElementById("checkAdmin").checked) roles+=" ADMIN,";
+			if(document.getElementById("checkTrainer").checked) roles+=" ENTRENADOR,";
+			if(document.getElementById("checkDTI").checked) roles+=" PERSONALDTI,";
+			if(document.getElementById("checkPYC").checked) permisos+=" MOSTRAR,";
+			if(document.getElementById("checkADU").checked) permisos+=" USUARIOS,";
+			if(document.getElementById("checkSEDE").checked) permisos+=" SEDES,";
+			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
+			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
+			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
+			roles.replace(/.$/, ']');
+			permisos.replace(/.$/, ']');
+			document.getElementById("rolId").value=roles;
+			document.getElementById("permId").value=permisos;
+		}
+		
+		function getActive(){
+			var activo = document.getElementById('pagina').value.split(":");
+			switch(activo[0]){
+				case "home":
+					document.getElementById('navLinkHome').className += " active itemNavActive";
+				    break;
+				case "usuarios":
+					document.getElementById('navLinkUsers').className += " active itemNavActive";
+				    break;
+				case "sedes":
+					document.getElementById('navLinkSedes').className += " active itemNavActive";
+				    break;
+				case "planes":
+					document.getElementById('navLinkPlanes').className += " active itemNavActive";
+				    break;
+				case "clases":
+					document.getElementById('navLinkClases').className += " active itemNavActive";
+				    break;
+			}
+		}
+
+	/*]]>*/
+	</script>
+</body>
+</html>

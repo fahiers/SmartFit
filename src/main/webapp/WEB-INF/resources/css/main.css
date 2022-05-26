@@ -1,0 +1,19 @@
+:root{
+	--naranjoSmart: #fcb823;
+	--negroSmart: #1f2123;
+	--grisSmart: #8a8b8f;
+}
+.backgroundSmart{
+	background-image: url(/SmartAppG5/resource/img/backgroundHome.png);
+}
+@font-face {
+	font-family: 'Aalto Sans Pro';
+  	src: url(/SmartAppG5/resource/fonts/AaltoSansPro-Medium.ttf) format('truetype'),
+	        url(/SmartAppG5/resource/fonts/AaltoSansPro-Medium.woff2) format('woff2'),
+	        url(/SmartAppG5/resource/fonts/AaltoSansPro-Medium.woff) format('woff');
+	font-weight: 500;
+	font-style: normal;
+}
+body {
+  font-family: 'Aalto Sans Pro' !important;
+}

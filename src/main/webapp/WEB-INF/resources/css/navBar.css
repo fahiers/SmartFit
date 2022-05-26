@@ -1,0 +1,46 @@
+@charset "UTF-8";
+#navBar{
+  background-color:#000000;
+  border-color:#000000;
+  font-weight: bold;
+}
+.itemNavLink{
+  color: #ffffff;
+}
+.itemNavLink:hover{
+  color: #ffffff;
+  opacity: 0.7;
+}
+.itemInternNav{
+  margin-top:-4px !important;;
+  background-color:#000000;
+}
+.internItemDrop{
+  color:#ffffff;
+}
+.internItemDrop:hover{
+  color:#000000;
+  background-color:#fcb823;
+}
+#ulNavBar{
+  border-bottom: #000000 ;
+}
+.itemNavActive{
+  background-color:#fcb823 !important;
+  border-color:#fcb823 !important;
+  color:#000000;
+  font-weight: bold;
+}
+#divMsgWelcome{
+  text-align: right;
+  color:#ffffff;
+}
+#fotoUser{
+  margin-top: -10px;
+  background-color: #ffffff;
+  border-radius: 25px;
+}
+
+#logo{
+  margin-top: 5px;
+}

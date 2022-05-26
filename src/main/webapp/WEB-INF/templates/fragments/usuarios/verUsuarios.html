@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div id="cuadroUsuarios" th:fragment="verUsuarios" >
+		<link th:href="@{resource/css/usuarios/verUsuarios.css}" rel="stylesheet"/>
+		<div th:if="${not #lists.isEmpty(allUsers)}">
+		<p id="verUsersP" class="col">Usuarios Registrados</p>
+	    <table class="table table-dark" id="tablaUsuarios">
+	        <tr>
+	            <th>Rut</th>
+	            <th>Nombre</th>
+	            <th>Apellido</th>
+	            <th>Correo</th>
+	            <th colspan="3">Opciones</th>
+	        </tr>
+	        <tr th:each="usuario : ${allUsers}">
+	            <td th:text="${usuario.id}"></td>
+	            <td th:text="${usuario.nombre}"></td>
+	            <td th:text="${usuario.apellido}"></td>
+	            <td th:text="${usuario.correo}"></td>
+				<td><button id="btnVerRyP" type="button" class="btn btn-warning">Ver Roles y Permisos</button></td>
+				<td><button id="btnVerEdit" type="button" class="btn btn-secondary">Editar</button></td>
+				<td><button id="btnVerDel" type="button" class="btn btn-danger">Borrar</button></td>
+	        </tr>
+	    </table>
+	</div>
+		</div>
+	</body>
+</html>

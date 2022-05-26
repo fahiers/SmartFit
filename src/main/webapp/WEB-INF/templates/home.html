@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		<link th:href="@{resource/css/bootstrap.min.css}" rel="stylesheet"/>
+		<script th:src="@{resource/js/popper.min.js}"></script>
+		<script th:src="@{resource/js/bootstrap.min.js}"></script>
+		<link th:href="@{resource/css/main.css}" rel="stylesheet"/>
+		<link th:replace="fragments/navBar :: cssHeader"/>
+		<title>Home SmartApp</title>
+	</head>
+	<body class="backgroundSmart"  onload="getActive();">
+		<div id="navBarHome" th:replace="fragments/navBar :: navBar"></div>
+        <th:block th:switch="${pagina}">
+            <th:block th:case="'home'">
+				<a>Estoy en Home</a>
+            </th:block>
+            <th:block th:case="'usuarios:crear'">
+				<div id="contenidoHome" th:replace="fragments/usuarios/crearUsuario :: crearUsuario"></div>
+            </th:block>
+            <th:block th:case="'usuarios:ver'">
+				<div id="divReplaceVerUsuarios" th:replace="fragments/usuarios/verUsuarios :: verUsuarios"></div>
+            </th:block>
+        </th:block>
+	</body>
+	<footer>
+		<div id="footerHome" th:replace="fragments/footer :: footer"></div>
+	</footer>
+	<script type="text/javascript" th:replace="fragments/scripts :: scripts"></script>
+</html>

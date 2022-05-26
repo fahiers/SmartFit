@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -17,7 +18,7 @@ import com.google.firebase.cloud.FirestoreClient;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"smart.controllers", "smart.servicios"})
+@ComponentScan({"smart.controllers", "smart.servicios","smart.security"})
 public class AppConfig implements WebMvcConfigurer {
 
 	   @Autowired
@@ -51,5 +52,9 @@ public class AppConfig implements WebMvcConfigurer {
 	      resolver.setTemplateEngine(templateEngine());
 	      registry.viewResolver(resolver);
 	   }
-
+	   @Override
+	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	        registry.addResourceHandler("/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("usuarios/resource/**").addResourceLocations("WEB-INF/resources/");
+	    }
 }

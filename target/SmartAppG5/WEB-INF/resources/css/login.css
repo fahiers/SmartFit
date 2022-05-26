@@ -1,0 +1,25 @@
+#cuadroLogin{
+    margin-left: 50%;
+    margin-top: 8%;
+}
+p{
+	color:#FFFFFF;
+    font-size: 20px;
+}
+#loginText{
+	color:var(--grisSmart);
+	font-size: 70px;
+}
+.centroForm {
+    margin: 5% 0% 5% 25%;
+}
+#btnSend{
+    width: 169.95px;
+    font-size: 25px;
+}
+.espaciadoInputs{
+    margin-top: 2px;
+}
+.sizeInput{
+    height: 30px;
+}
