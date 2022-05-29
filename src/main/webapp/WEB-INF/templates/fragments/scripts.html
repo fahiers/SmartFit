@@ -25,8 +25,12 @@
 			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
 			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
 			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
-			roles = roles.slice(1,-1);
-			permisos = permisos.slice(1,-1);
+			if(roles != ""){
+				roles = roles.slice(1,-1);
+			}
+			if(roles != ""){
+				permisos = permisos.slice(1,-1);
+			}
 			document.getElementById("rolId").value=roles;
 			document.getElementById("permId").value=permisos;
 		}
@@ -49,7 +53,69 @@
 				case "clases":
 					document.getElementById('navLinkClases').className += " active itemNavActive";
 				    break;
+				case "salas":
+					document.getElementById('navLinkSalas').className += " active itemNavActive";
+					break;
+				case "equipos":
+					document.getElementById('navLinkEquipos').className += " active itemNavActive";
+				    break;
+				case "miSede":
+					document.getElementById('navLinkMiSede').className += " active itemNavActive";
+					break;
 			}
+		}
+		function ocuparSala(parametro){
+			var sala= parametro.split(":")[0];
+			var user= parametro.split(":")[1];
+			var url = "http://localhost:8080/SmartAppG5/miSede/ocupar?salaId="+sala+"&userId="+user;
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('GET', url, true);
+
+			xhr.addEventListener('error', function(e) {
+			  console.log('Un error ocurrió', e);
+			});
+
+			xhr.addEventListener('readystatechange', function() {
+			  console.log('xhr.readyState:', xhr.readyState);
+			});
+			
+			xhr.onreadystatechange = function(){
+				
+				if(this.readyState == 4 && this.status == 200){
+				window.location.reload(false);
+		        console.log(xhr.responseText);
+		    	}
+			};
+			xhr.send();
+			
+		
+		}
+		function liberarSala(parametro){
+			var user= parametro.split(":")[1];
+			var url = "http://localhost:8080/SmartAppG5/miSede/liberar?userId="+user;
+			var xhr = new XMLHttpRequest();
+
+			xhr.open('GET', url, true);
+
+			xhr.addEventListener('error', function(e) {
+			  console.log('Un error ocurrió', e);
+			});
+
+			xhr.addEventListener('readystatechange', function() {
+			  console.log('xhr.readyState:', xhr.readyState);
+			});
+			
+			xhr.onreadystatechange = function(){
+				
+				if(this.readyState == 4 && this.status == 200){
+				window.location.reload(false);
+		        console.log(xhr.responseText);
+		        }
+			};
+			xhr.send();
+			
+		
 		}
 
 	/*]]>*/

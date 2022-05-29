@@ -1,12 +1,14 @@
 package smart.models;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.Id;
 
+@Entity
 public class Equipo {
 	@Id
 	private String id;

@@ -9,20 +9,35 @@ import javax.persistence.CascadeType;
 
 import org.springframework.data.annotation.Id;
 
+import com.google.cloud.firestore.DocumentReference;
+
 @Entity
 public class Sede {
 	
 	@Id
-	private String id;
+	private String Id;
+	private String nombre;
 	private String direccion;
+	private String region;
 	private int aforo;
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private LinkedList<Sala> salas;
+	private LinkedList<DocumentReference> salas;
+	
+	public Sede() {
+		
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 	public String getId() {
-		return id;
+		return Id;
 	}
 	public void setId(String id) {
-		this.id = id;
+		Id = id;
 	}
 	public String getDireccion() {
 		return direccion;
@@ -36,10 +51,19 @@ public class Sede {
 	public void setAforo(int aforo) {
 		this.aforo = aforo;
 	}
-	public LinkedList<Sala> getSalas() {
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public LinkedList<DocumentReference> getSalas() {
 		return salas;
 	}
-	public void setSalas(LinkedList<Sala> salas) {
+
+	public void setSalas(LinkedList<DocumentReference> salas) {
 		this.salas = salas;
 	}
+	
 }

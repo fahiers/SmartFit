@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.google.auth.oauth2.GoogleCredentials;

@@ -4,22 +4,22 @@
 }
 p{
 	color:#FFFFFF;
-    font-size: 20px;
+    font-size: 1.6vw;
 }
 #loginText{
 	color:var(--grisSmart);
-	font-size: 70px;
+	font-size: 5vw;
 }
 .centroForm {
     margin: 5% 0% 5% 25%;
 }
 #btnSend{
-    width: 169.95px;
-    font-size: 25px;
+    width: 10vw;
+    font-size: 2vw;
 }
 .espaciadoInputs{
-    margin-top: 2px;
+    margin-top: 0.5vw;
 }
 .sizeInput{
-    height: 30px;
+    height: 2.5vw;
 }

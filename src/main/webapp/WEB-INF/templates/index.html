@@ -13,7 +13,7 @@
 		<div class="container" id="imgBtnHome">
 		    <div id="smartFitIndex" class="filaHome row align-items-center">
 			    <a id="imgHome" class="col-5" href="https://www.smartfit.cl">
-					<img th:src="@{resource/img/logos/logoSmartFitCom.png}" alt="thFoto" height="80px"/>
+					<img th:src="@{resource/img/logos/logoSmartFitCom.png}" alt="thFoto" class="imgIndex"/>
 			    </a>
 				<a class="col marginBtnHome" href="https://www.smartfit.cl">
 					<button type="button" class="btn btn-warning col btnHome">Ir a SmartFit.com</button>
@@ -21,7 +21,7 @@
 		    </div>
 		    <div id="smartAppIndex" class="filaHome row align-items-center">
 			    <a id="imgHome" class="col-5" th:href="@{/home}">
-					<img th:src="@{resource/img/logos/logoSmartAppCom.png}" alt="thFoto" height="80px"/>
+					<img th:src="@{resource/img/logos/logoSmartAppCom.png}" alt="thFoto" class="imgIndex"/>
 			    </a>
 				<a class="col marginBtnHome" th:href="@{/home}">
 					<button type="button" class="btn btn-warning col btnHome">Ir a SmartApp.com</button>
@@ -29,7 +29,7 @@
 		    </div>
 		    <div id="smartFitGoIndex" class="filaHome row align-items-center">
 			    <a id="imgHome" class="col-5" href="https://www.smartfit-go.cl">
-					<img th:src="@{resource/img/logos/logoSmartGoCom.png}" alt="thFoto" height="80px"/>
+					<img id="imgSmartGo" th:src="@{resource/img/logos/logoSmartGoCom.png}" alt="thFoto" class="imgIndex"/>
 			    </a>
 				<a class="col marginBtnHome" href="https://www.smartfit-go.cl">
 					<button type="button" class="btn btn-warning col btnHome">Ir a SmartFit-GO.com</button>
@@ -37,4 +37,8 @@
 		    </div>
 		</div>
 	</body>
+	
+	<footer>
+		<div id="footerHome" th:replace="fragments/footer :: footer"></div>
+	</footer>
 </html>

@@ -1,8 +1,10 @@
 package smart.models;
 
+
 import java.util.LinkedList;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -10,24 +12,40 @@ import javax.persistence.OneToMany;
 
 import org.springframework.data.annotation.Id;
 
+import com.google.cloud.firestore.DocumentReference;
+
+@Entity
 public class Sala {
 	
 	@Id
 	private String id;
+	private String nombre;
 	private String estado;
 	private String tipo;
-	@OneToMany(fetch=FetchType.LAZY)
-	private Usuario profesor;
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private Sede sede;
+	private int aforo;
 	@ManyToMany(fetch=FetchType.LAZY)
-	private LinkedList<Equipo> equipos;
+	private LinkedList<DocumentReference> profesores;
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private DocumentReference sede;
 	
+	public LinkedList<DocumentReference> getProfesores() {
+		return profesores;
+	}
+	public void setProfesores(LinkedList<DocumentReference> profesores) {
+		this.profesores = profesores;
+	}
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 	public String getEstado() {
 		return estado;
@@ -35,29 +53,23 @@ public class Sala {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	public Usuario getProfesor() {
-		return profesor;
-	}
-	public void setProfesor(Usuario profesor) {
-		this.profesor = profesor;
-	}
-	public Sede getSede() {
+	public DocumentReference getSede() {
 		return sede;
 	}
-	public void setSede(Sede sede) {
+	public void setSede(DocumentReference sede) {
 		this.sede = sede;
-	}
-	public LinkedList<Equipo> getEquipos() {
-		return equipos;
-	}
-	public void setEquipos(LinkedList<Equipo> equipos) {
-		this.equipos = equipos;
 	}
 	public String getTipo() {
 		return tipo;
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public int getAforo() {
+		return aforo;
+	}
+	public void setAforo(int aforo) {
+		this.aforo = aforo;
 	}
 	
 	

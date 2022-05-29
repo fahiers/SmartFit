@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -56,5 +57,8 @@ public class AppConfig implements WebMvcConfigurer {
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry.addResourceHandler("/resource/**").addResourceLocations("WEB-INF/resources/");
 	        registry.addResourceHandler("usuarios/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("sedes/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("salas/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("miSede/resource/**").addResourceLocations("WEB-INF/resources/");
 	    }
 }

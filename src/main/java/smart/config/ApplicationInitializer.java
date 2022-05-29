@@ -1,7 +1,9 @@
 package smart.config;
 
 
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
 
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 

@@ -3,9 +3,13 @@ package smart.models;
 import java.util.LinkedList;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.Id;
+
+import com.google.cloud.firestore.DocumentReference;
 
 import lombok.ToString;
 
@@ -13,9 +17,7 @@ import lombok.ToString;
 @Entity
 @ToString
 public class Usuario{
-	
-	
-	private String id;
+
 	private String nombre;
 	private String apellido;
 	private String correo;
@@ -27,27 +29,12 @@ public class Usuario{
 	private LinkedList<String> roles;
 	private LinkedList<String> permisos;
 	@OneToOne
-	private Sede sede;
+	private DocumentReference sede;
+	@OneToOne
+	private DocumentReference salaActual;
+	
 	
 	public Usuario() {
-	}
-	public Usuario(String nombre, String apellido, String correo, String password, String rut, int errorLogin,
-			boolean activo, LinkedList<String> roles, LinkedList<String> permisos) {
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.correo = correo;
-		this.password = password;
-		this.rut = rut;
-		this.errorLogin = errorLogin;
-		this.activo = activo;
-		this.roles = roles;
-		this.permisos = permisos;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
 	}
 	public String getNombre() {
 		return nombre;
@@ -78,7 +65,6 @@ public class Usuario{
 	}
 	public void setRut(String rut) {
 		this.rut = rut;
-		this.id = rut;
 	}
 	public int getErrorLogin() {
 		return errorLogin;
@@ -104,11 +90,17 @@ public class Usuario{
 	public void setPermisos(LinkedList<String> permisos) {
 		this.permisos = permisos;
 	}
-	public Sede getSede() {
+	public DocumentReference getSede() {
 		return sede;
 	}
-	public void setSede(Sede sede) {
+	public void setSede(DocumentReference sede) {
 		this.sede = sede;
+	}
+	public DocumentReference getSalaActual() {
+		return salaActual;
+	}
+	public void setSalaActual(DocumentReference salaActual) {
+		this.salaActual = salaActual;
 	}
 	
 }

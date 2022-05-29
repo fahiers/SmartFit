@@ -1,0 +1,40 @@
+.eachSala{
+	padding: 1vw;
+	width: 23.75%;
+	margin-left: 2%;
+	margin-bottom: 2%;
+	border-radius: 3vw;
+}
+.btnSala{
+	margin-top: 5%;
+	margin-left: 25%;
+	width: 50%;
+	font-size: 1.6vw;
+	
+}
+.tituloInterno{
+	text-align: center;
+	font-size: 2.3vw;
+	margin-bottom: 0;
+	color:#000000;
+}
+.subrayado{
+	text-decoration:underline;
+}
+.textoInteriorEachSala{
+	color:#000000;
+	font-size: 1.1vw;
+	margin-bottom: 0;
+}
+.estadoLibre{
+	background-color: #ff0000;
+	border: 0.5vw solid #000000;
+}
+.estadoOcupada{
+	background-color: #3cb371;
+	border: 0.5vw solid #000000;
+}
+.estadoDeshabilitada{
+	background-color: var(--grisSmart);
+	border: 0.5vw solid #000000;
+}

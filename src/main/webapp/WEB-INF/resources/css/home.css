@@ -11,8 +11,13 @@
     max-width: 60%;
 }
 .btnHome{
-    width: 180px;
+    width: 40%;
+    font-size: 1.07vw;
 }
 .filaHome{
-    margin-top: 45px;
+    margin-top: 3vw;
+}
+
+.imgIndex{
+	width:100%
 }

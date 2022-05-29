@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="crearSedes" >
+		<link th:href="@{resource/css/sedes/crearSede.css}" rel="stylesheet"/>
+			<form th:action="@{/sedes/addSede}" method="post" id="formCrearSede" onsubmit="setRolesyPermisos();" th:object="${newSede}" class="container cuadroBNS col-5 formCreate">
+				<div class="row">
+					<p id="addSedeP" class="col tituloForm">Añadir Sede</p>
+				</div>
+				<div class="row">
+					<p class="col-2">Nombre</p> <input type="text" class="col-8" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Direccion</p> <input type="text" class="col-8" th:field="*{direccion}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Region</p>
+					<select th:field="*{region}" class="col-8">
+					    <option th:value="'I - Región de Tarapacá'" th:text="'I - Región de Tarapacá'"></option>
+					    <option th:value="'II - Región de Antofagasta'" th:text="'II - Región de Antofagasta'"></option>
+					    <option th:value="'III - Región de Atacama'" th:text="'III - Región de Atacama'"></option>
+					    <option th:value="'IV - Región de Coquimbo'" th:text="'IV - Región de Coquimbo'"></option>
+					    <option th:value="'V - Región de Valparaíso'" th:text="'V - Región de Valparaíso'"></option>
+					    <option th:value="'VI - Región del Libertador General Bernardo O’Higgins'" th:text="'VI - Región del Libertador General Bernardo O’Higgins'"></option>
+					    <option th:value="'VII - Región del Maule'" th:text="'VII - Región del Maule'"></option>
+					    <option th:value="'VIII - Región del Biobío'" th:text="'VIII - Región del Biobío'"></option>
+					    <option th:value="'IX - Región de La Araucanía'" th:text="'IX - Región de La Araucanía'"></option>
+					    <option th:value="'X - Región de Los Lagos'" th:text="'X - Región de Los Lagos'"></option>
+					    <option th:value="'XI - Región Aysén del General Carlos Ibáñez del Campo'" th:text="'XI - Región Aysén del General Carlos Ibáñez del Campo'"></option>
+					    <option th:value="'XII - Región de Magallanes y Antártica Chilena'" th:text="'XII - Región de Magallanes y Antártica Chilena'"></option>
+					    <option th:value="'RM - Región Metropolitana de Santiago'" th:text="'RM - Región Metropolitana de Santiago'"></option>
+					    <option th:value="'XIV - Región de Los Ríos'" th:text="'XIV - Región de Los Ríos'"></option>
+					    <option th:value="'XV - Región de Arica y Parinacota'" th:text="'XV - Región de Arica y Parinacota'"></option>
+					    <option th:value="'XVI - Región de Ñuble'" th:text="'XVI - Región de Ñuble'"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Aforo</p> <input type="number" class="col-8" th:field="*{aforo}" required />
+				</div>
+				<div class="col">
+			    		<input type="submit" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

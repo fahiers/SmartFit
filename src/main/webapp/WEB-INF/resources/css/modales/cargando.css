@@ -1,0 +1,19 @@
+.dialogoModal{
+  margin-top: 15%;
+  background-color: var(--naranjoSmart);
+}
+.contenidoModal{
+  background-color: var(--naranjoSmart);
+  color:#000000;
+  font-size: 2vw;
+}
+.cabezeraModal{
+  font-size: 2vw;
+  border-bottom: 0.2vw solid var(--grisSmart);
+}
+.piesModal{
+  border-top: 0.2vw solid var(--grisSmart);
+}
+#labelModalCargando{
+  font-size: 2vw;
+}

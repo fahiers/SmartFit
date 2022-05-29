@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="miSede">
+			<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			<p id="verMiSedeP" class="col tituloVer" th:text="${'Salas de la sede : ' + sedeActual.nombre}"></p>
+	        <div id="eachSede" class="container-xxl row">
+	        	<div th:each="sala : ${allSalas}" th:class="${'eachSala container row estado'+sala.estado}">
+        			<p class="tituloInterno col-12" th:text="${sala.nombre}"></p>
+					<img  class="svgLogo col-6" th:src="@{resource/svg/} +${sala.tipo} + 'SVG'+'.svg'" alt="thFoto"/>
+					<div class="datosSala col-6 container">
+        				<p class="textoInteriorEachSala col-12" th:text="'Estado: ' + ${sala.estado}"></p>
+        				<p class="textoInteriorEachSala col-12 subrayado" th:text="'Al interior'"></p>
+	        			<div  th:if="${not #lists.isEmpty(sala.profesores)}" th:each="profesor : ${sala.profesores}" class="col-12">
+	        				<div th:object="${profesor.get.get.toObject(claseUser)}">
+        						<p class="textoInteriorEachSala col-12"  th:text="*{nombre + ' ' +apellido[0] + '.'}"></p>
+	        				</div>
+        				</div>
+        				<div th:unless="${not #lists.isEmpty(sala.profesores)}">
+        						<p class="textoInteriorEachSala col-12" th:text="'Desocupada'"></p>
+						</div>
+        				<p class="textoInteriorEachSala col-12" th:text="'Aforo: ' + ${sala.aforo}"></p>
+					</div>
+					<div class="col-12" th:with="parametro=${sala.id+':'+usuario.rut}">
+						<button th:if="${#strings.equals(sala.estado, 'Libre')}" 
+							type="button" class="btn btn-warning btnSala" th:id="${parametro}"
+								onclick="ocuparSala(this.id)" data-bs-toggle="modal" data-bs-target="#modalCargando">Ocupar</button>
+						<button th:if="${#lists.contains(sala.profesores, userDoc)}" 
+							type="button" class="btn btn-dark btnSala" th:id="${parametro}" data-bs-toggle="modal"  
+								data-bs-target="#modalCargando" onclick="liberarSala(this.id)">Liberar</button>
+					</div>
+	        	</div>
+	        </div>
+		</div>
+	</body>
+</html>

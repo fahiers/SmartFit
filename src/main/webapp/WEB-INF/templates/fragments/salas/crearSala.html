@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="crearSala" >
+			<form th:action="@{/salas/addSala}" method="post" id="formCrearSala" th:object="${newSala}" class="container cuadroBNS col-5 formCreate">
+				<div class="row">
+					<p id="addSalaP" class="col tituloForm">Añadir Sala</p>
+				</div>
+				<div class="row">
+					<p class="col-2">Nombre</p> <input type="text" class="col-8" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Tipo</p>
+					<select th:field="*{tipo}" class="col-8">
+					    <option th:value="Musculacion" th:text="Musculacion"></option>
+					    <option th:value="Maquinas" th:text="Maquinas"></option>
+					    <option th:value="Clases" th:text="Clases"></option>
+					    <option th:value="Spinning" th:text="Spinning"></option>
+					    <option th:value="Recreacion" th:text="Recreacion"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Estado</p>
+					<select th:field="*{estado}" class="col-8">
+					    <option th:value="Deshabilitada" th:text="Deshabilitada"></option>
+					    <option th:value="Libre" th:text="Libre"></option>
+					    <option th:value="Ocupada" th:text="Ocupada"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Aforo</p> <input type="number" class="col-8" th:field="*{aforo}" required />
+				</div>
+				<div th:if="${not #lists.isEmpty(allSedes)}" class="row">
+			    	<p class="col-2">Sede</p>
+					<select name="sedeString" class="col-8">
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+				</div>
+				<div class="col">
+			    		<input type="submit" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

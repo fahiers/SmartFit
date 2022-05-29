@@ -2,8 +2,11 @@ package smart.models;
 
 import java.util.LinkedList;
 
+import javax.persistence.Entity;
+
 import org.springframework.data.annotation.Id;
 
+@Entity
 public class Plane {
 
 	@Id
