@@ -1,5 +1,7 @@
 package smart.controllers;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.cloud.firestore.DocumentReference;
 
 import smart.servicios.CRUDServices;
+import smart.models.Registro;
 import smart.models.Sala;
 import smart.models.Sede;
 import smart.models.Usuario;
@@ -40,22 +43,49 @@ public class MiSedeController {
 		this.crudService = new CRUDServices();
 		this.user=((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         LinkedList<Sala> salas = new LinkedList<>();
-        for (DocumentReference sala : user.getSede().get().get().toObject(Sede.class).getSalas()) {
-			salas.add(sala.get().get().toObject(Sala.class));
-		}
-        Sede sedeActual = (Sede) crudService.readFromRef(user.getSede(), Sede.class);
+        LinkedList<Sede> sedes = new LinkedList<>();
+        Sede miSede = user.getSede().get().get().toObject(Sede.class);
+        if(user.getSede()!= null && (!user.getRoles().contains("ADMIN") || !user.getRoles().contains("PERSONALDTI"))) {
+            for (DocumentReference sala : miSede.getSalas()) {
+    			salas.add(sala.get().get().toObject(Sala.class));
+    		}
+        }
+        if(user.getRoles().contains("ADMIN") || user.getRoles().contains("PERSONALDTI")) {
+        	for (Object sedePrev : crudService.getAllDocs(Sede.class)) {
+        		sedes.add((Sede) sedePrev);
+    		}
+        }
         DocumentReference userDoc = crudService.getDocRef("usuarios", user.getRut());
         model.addAttribute("usuario", user);
         model.addAttribute("pagina", "miSede:ver");
-        model.addAttribute("sedeActual",sedeActual);
+        model.addAttribute("sede",miSede);
         model.addAttribute("allSalas",salas);
+        model.addAttribute("allSedes",sedes);
         model.addAttribute("userDoc",userDoc);
         model.addAttribute("claseUser",Usuario.class);
-        System.out.println("cargo");
         return new ModelAndView("home");
 	}
 	
-	@GetMapping("/ocupar")
+	@PostMapping("/changeSede")
+	public ModelAndView changeSede(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException{
+		this.crudService = new CRUDServices();
+		Sede sede = (Sede) crudService.read(id, Sede.class);
+    	LinkedList<Sala> salas = new LinkedList<>();
+    	if(sede.getSalas()!=null) {
+        	for (DocumentReference sala : sede.getSalas()) {
+    			salas.add(sala.get().get().toObject(Sala.class));
+    		}
+    	}
+        DocumentReference userDoc = crudService.getDocRef("usuarios", user.getRut());
+        model.addAttribute("usuario", user);
+        model.addAttribute("sede",sede);
+        model.addAttribute("allSalas",salas);
+        model.addAttribute("userDoc",userDoc);
+        model.addAttribute("claseUser",Usuario.class);
+        return new ModelAndView("fragments/miSede/selectMiSede");
+	}
+	
+	@PostMapping("/ocupar")
 	public String ocupar(@RequestParam(name="salaId") String sala, @RequestParam(name="userId") String user) throws InterruptedException, ExecutionException {
 		Usuario userObj = (Usuario) crudService.read(user, Usuario.class);
 		Sala salaObj = (Sala) crudService.read(sala, Sala.class);
@@ -63,23 +93,47 @@ public class MiSedeController {
 			Sala salaPrevia = (Sala) crudService.read(userObj.getSalaActual().getId(), Sala.class);
 			salaPrevia.getProfesores().remove(crudService.getDocRef("usuarios", userObj.getRut()));
 			salaPrevia.setEstado("Libre");
+			Registro regObjPrev = new Registro();
+			regObjPrev.setId(crudService.newDoc("registros").getId());
+			regObjPrev.setSala(crudService.getDocRef("salas", salaPrevia.getId()));
+			regObjPrev.setSede(salaObj.getSede());
+			regObjPrev.setUsuario(crudService.getDocRef("usuarios", user));
+			regObjPrev.setTipo("Salida");
+			regObjPrev.setFecha(new Date());
+			crudService.update(regObjPrev, regObjPrev.getId());
 			crudService.update(salaPrevia, salaPrevia.getId());
 		}
 		userObj.setSalaActual(crudService.getDocRef("salas", sala));
 		salaObj.getProfesores().add(crudService.getDocRef("usuarios", user));
 		salaObj.setEstado("Ocupada");
+		Registro regObj = new Registro();
+		regObj.setId(crudService.newDoc("registros").getId());
+		regObj.setSala(crudService.getDocRef("salas", sala));
+		regObj.setSede(salaObj.getSede());
+		regObj.setUsuario(crudService.getDocRef("usuarios", user));
+		regObj.setTipo("Ingreso");
+		regObj.setFecha(new Date());
+		crudService.update(regObj, regObj.getId());
 		crudService.update(salaObj, sala);
 		crudService.update(userObj, user);
 		return "Ok";
 	}
 	
-	@GetMapping("/liberar")
+	@PostMapping("/liberar")
 	public Object liberar(@RequestParam(name="userId") String user) throws InterruptedException, ExecutionException {
 		Usuario userObj = (Usuario) crudService.read(user, Usuario.class);
 		Sala salaPrevia = (Sala) crudService.read(userObj.getSalaActual().getId(), Sala.class);
 		salaPrevia.getProfesores().remove(crudService.getDocRef("usuarios", userObj.getRut()));
 		salaPrevia.setEstado("Libre");
 		userObj.setSalaActual(null);
+		Registro regObj = new Registro();
+		regObj.setId(crudService.newDoc("registros").getId());
+		regObj.setSala(crudService.getDocRef("salas", salaPrevia.getId()));
+		regObj.setSede(salaPrevia.getSede());
+		regObj.setUsuario(crudService.getDocRef("usuarios", user));
+		regObj.setTipo("Salida");
+		regObj.setFecha(new Date());
+		crudService.update(regObj, regObj.getId());
 		crudService.update(salaPrevia, salaPrevia.getId());
 		crudService.update(userObj, user);
 		return "Ok";

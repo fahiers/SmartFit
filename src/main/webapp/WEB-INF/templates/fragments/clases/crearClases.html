@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="crearClase" >
+			<div th:with="msjCabezeraModal='Guardando Clase',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<form th:action="@{/planes/addClase}" method="post" id="formCrearClase" th:object="${newClase}" class="container cuadroBNS col-5 formCreate">
+				<div class="row">
+					<p id="addClaseP" class="col tituloForm">Añadir Clase</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomClase" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+					<p class="col-3">Duracion</p> <input id="inDurClase" type="text" class="col-7" th:field="*{duracion}" required/>
+				</div>
+				<div class="row">
+					<p class="col-3">Descripcion</p> <input id="inDescClase" type="text" class="col-7" th:field="*{descripcion}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Sede</p>
+					<select id="selectSedeclase" class="col-7" onChange="getMisSalasClase(this.options[this.selectedIndex].value)">
+						<option value="" selected disabled hidden>Seleccione una sede</option>
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+				</div>
+				<div id="selectSalasClase" class="row">
+			    	<p class="col-3">Sala</p>
+					<select th:field="*{id}" class="col-7" disabled>
+					    <option th:value="0"> Seleccione una Sede Primero</option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Horarios</p>
+					<select id="selectDia" class="col-3" onChange="habilitarBtnHorario()">
+					    <option value="0" >Dia</option>
+					    <option value="Lunes">Lunes</option>
+					    <option value="Martes">Martes</option>
+					    <option value="Miércoles">Miércoles</option>
+					    <option value="Jueves" >Jueves</option>
+					    <option value="Viernes" >Viernes</option>
+					    <option value="Sábado" >Sábado</option>
+					    <option value="Domingo" >Domingo</option>
+					</select>
+					<input class="col-2" type="time" id="selectHora" min="08:00" max="19:00" onChange="habilitarBtnHorario()" required>
+			    	<input type="button" onclick="addHorario()" class="col-2 centroForm btn btn-dark" id="btnSendHorario" value="Agregar" disabled/>
+				</div>
+				<input id="caractAddedToSend" type="hidden" th:field="*{horarios}" value = ""/>
+				<input id="salaEnId" type="hidden" th:field="*{id}" value=""/>
+				<div class="row">
+					<div id="tablaCaractClase">
+							<p id="caractAddLabel" class="col-12 text-center"> Horarios Añadidos</p>
+							<input id="caractAdded" type="hidden" value = ""/>
+							<p id="verCaractP" class="col" th:text="${'No hay Horarios registrados'}"></p>
+					</div>
+				</div>
+				<div class="col">
+			    		<input type="button" onclick="crear('Clase')" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

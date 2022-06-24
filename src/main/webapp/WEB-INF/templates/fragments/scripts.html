@@ -6,35 +6,217 @@
 <body>
 	<script th:fragment="scripts" >
 	/*<![CDATA[*/
+		
 		function setUsername(){
 			   document.getElementById('hidden').value = 
 				   (document.getElementById('rut').value+':'+
 				   document.getElementById('nom').value+':'+
 				   document.getElementById('sur').value).toLowerCase();
-		}
-	
-		function setRolesyPermisos(){
-			var roles= "";
-			var permisos ="";
-			if(document.getElementById("checkAdmin").checked) roles+=" ADMIN,";
-			if(document.getElementById("checkTrainer").checked) roles+=" ENTRENADOR,";
-			if(document.getElementById("checkDTI").checked) roles+=" PERSONALDTI,";
-			if(document.getElementById("checkPYC").checked) permisos+=" MOSTRAR,";
-			if(document.getElementById("checkADU").checked) permisos+=" USUARIOS,";
-			if(document.getElementById("checkSEDE").checked) permisos+=" SEDES,";
-			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
-			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
-			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
-			if(roles != ""){
-				roles = roles.slice(1,-1);
+		};
+		function setSalaEnId(){
+			var select = document.getElementById('selectPrevioSalaenId');
+			document.getElementById('salaEnId').value = select.options[select.selectedIndex].value;
+		};
+		function habilitarBtnCaract(){
+			if(document.getElementById('caractToAdd').value == ""){
+				document.getElementById('btnSendCaract').disabled = true;
+			} else {
+				document.getElementById('btnSendCaract').disabled = false;
 			}
-			if(roles != ""){
-				permisos = permisos.slice(1,-1);
-			}
-			document.getElementById("rolId").value=roles;
-			document.getElementById("permId").value=permisos;
 		}
-		
+		function activarBtnReporte(){
+			if(document.getElementById('desde').value =="" || document.getElementById('hasta').value ==""){
+				document.getElementById('btnEmitirSede').disabled = true;
+				document.getElementById('btnEmitirUser').disabled = true;
+			}
+			else if(document.getElementById('selectSedeclase').value == ""){
+				document.getElementById('btnEmitirSede').disabled = true;
+				document.getElementById('btnEmitirUser').disabled = true;
+				document.getElementById('selectUsers').disabled = true;
+			}
+			else {
+				var datosDesde =document.getElementById('desde').value.split('-');
+				var datosHasta =document.getElementById('hasta').value.split('-');
+				var dateDesde = new Date(datosDesde[0], datosDesde[1] - 1, datosDesde[2]); 
+				var dateHasta = new Date(datosHasta[0], datosHasta[1] - 1, datosHasta[2]);
+				var hoy = new Date();
+				if(dateDesde>hoy || dateHasta>hoy){
+					document.getElementById('btnEmitirSede').disabled = true;
+					document.getElementById('btnEmitirUser').disabled = true;
+				}
+				else {
+					document.getElementById('btnEmitirSede').disabled = false;
+					if(document.getElementById('selectUsers').value == ""){
+						document.getElementById('selectUsers').disabled = false;
+						document.getElementById('btnEmitirUser').disabled = true;
+					}
+					else if(document.getElementById('selectUsers').value == "0"){
+						document.getElementById('btnEmitirUser').disabled = true;
+						document.getElementById('selectUsers').disabled = true;
+					}else {
+						document.getElementById('selectUsers').disabled = false;
+						document.getElementById('btnEmitirUser').disabled = false;
+					}
+				}
+			}
+		}
+		function modificarDesde(){
+			console.log(document.getElementById('desde').value);
+			document.getElementById('hasta').min =document.getElementById('desde').value;
+			document.getElementById('hasta').value ="";
+			activarBtnReporte();
+		}
+		function habilitarBtnHorario(){
+			if(document.getElementById('selectDia').value == "0" || document.getElementById('selectHora').value ==""){
+				document.getElementById('btnSendHorario').disabled = true;
+			} else {
+				document.getElementById('btnSendHorario').disabled = false;
+			}
+		}
+		function addHorario() {
+			var url = "/SmartAppG5/clases/addHorario";
+			var caractNew=document.getElementById('selectDia').value + " " +document.getElementById('selectHora').value;
+			console.log("/"+document.getElementById('selectHora').value+"/")
+			var caracteristicas=document.getElementById('caractAdded').value;
+			var dataReq= {
+					"newC": caractNew,
+					"caract" : caracteristicas
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		  			document.getElementById("selectDia").value="0";
+		  			document.getElementById("selectHora").value="";
+					document.getElementById('btnSendHorario').disabled = true;
+		            $("#tablaCaractClase").html(data);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+		function addCaract() {
+			var url = "/SmartAppG5/planes/addCaract";
+			var caractNew=document.getElementById('caractToAdd').value;
+			var caracteristicas=document.getElementById('caractAdded').value;
+			var dataReq= {
+					"newC": caractNew,
+					"caract" : caracteristicas
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		  			document.getElementById("caractToAdd").value="";
+					document.getElementById('btnSendCaract').disabled = true;
+		            $("#tablaCaractPlan").html(data);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+		function getSalas(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/salas/obtenerSalas";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#divReplaceSalas").html(data);
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+        function getMisSalasClase(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/clases/changeSede";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#selectSalasClase").html(data);
+		        	$('#modalCargando').modal('hide');
+					var select = document.getElementById('selectPrevioSalaenId');
+					document.getElementById('salaEnId').value = select.options[0].value;
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+        function getMisSalas(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/miSede/changeSede";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#divReplaceMiSedeSalas").html(data);
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+
+        function getMisUsuarios(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/reportes/cargarUsers";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#selectUsers").html(data);
+		            activarBtnReporte();
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
 		function getActive(){
 			var activo = document.getElementById('pagina').value.split(":");
 			switch(activo[0]){
@@ -63,61 +245,309 @@
 					document.getElementById('navLinkMiSede').className += " active itemNavActive";
 					break;
 			}
-		}
+		};
 		function ocuparSala(parametro){
+        	$('#modalCargando').modal('show');
 			var sala= parametro.split(":")[0];
 			var user= parametro.split(":")[1];
-			var url = "http://localhost:8080/SmartAppG5/miSede/ocupar?salaId="+sala+"&userId="+user;
-			var xhr = new XMLHttpRequest();
-
-			xhr.open('GET', url, true);
-
-			xhr.addEventListener('error', function(e) {
-			  console.log('Un error ocurrió', e);
-			});
-
-			xhr.addEventListener('readystatechange', function() {
-			  console.log('xhr.readyState:', xhr.readyState);
-			});
-			
-			xhr.onreadystatechange = function(){
-				
-				if(this.readyState == 4 && this.status == 200){
-				window.location.reload(false);
-		        console.log(xhr.responseText);
-		    	}
-			};
-			xhr.send();
-			
 		
-		}
-		function liberarSala(parametro){
-			var user= parametro.split(":")[1];
-			var url = "http://localhost:8080/SmartAppG5/miSede/liberar?userId="+user;
-			var xhr = new XMLHttpRequest();
-
-			xhr.open('GET', url, true);
-
-			xhr.addEventListener('error', function(e) {
-			  console.log('Un error ocurrió', e);
-			});
-
-			xhr.addEventListener('readystatechange', function() {
-			  console.log('xhr.readyState:', xhr.readyState);
-			});
-			
-			xhr.onreadystatechange = function(){
-				
-				if(this.readyState == 4 && this.status == 200){
-				window.location.reload(false);
-		        console.log(xhr.responseText);
+			var url = "/SmartAppG5/miSede/ocupar";
+			var dataReq= {
+					"salaId" : sala,
+					"userId" : user
+			}
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+					window.location.reload(false);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
 		        }
-			};
-			xhr.send();
-			
+		    });
 		
-		}
+		};
+		function liberarSala(parametro){
+        	$('#modalCargando').modal('show');
+			var user= parametro.split(":")[1];
+		
+			var url = "/SmartAppG5/miSede/liberar";
+			var dataReq= {
+					"userId" : user
+			}
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+					window.location.reload(false);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+		
+		};
+		function setRolesyPermisos(){
+			var roles= "";
+			var permisos ="";
+			if(document.getElementById("checkAdmin").checked) roles+=" ADMIN,";
+			if(document.getElementById("checkTrainer").checked) roles+=" ENTRENADOR,";
+			if(document.getElementById("checkDTI").checked) roles+=" PERSONALDTI,";
+			if(document.getElementById("checkPYC").checked) permisos+=" MOSTRAR,";
+			if(document.getElementById("checkADU").checked) permisos+=" USUARIOS,";
+			if(document.getElementById("checkSEDE").checked) permisos+=" SEDES,";
+			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
+			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
+			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
+			if(roles != ""){
+				roles = roles.slice(1,-1);
+			}
+			if(roles != ""){
+				permisos = permisos.slice(1,-1);
+			}
+			document.getElementById("AddUserRolId").value=roles;
+			document.getElementById("AddUserPermId").value=permisos;
+			return "ok";
+		};
+		function reset(tipoForm){
+			switch(tipoForm) {
+		  		case "Usuario":
+		  			document.getElementById("AddUserNombre").value="";
+		  			document.getElementById("AddUserApellido").value="";
+		  			document.getElementById("AddUserCorreo").value="";
+		  			document.getElementById("userRut").value="";
+		  			document.getElementById("AddUserPass").value="";
+		  			document.getElementById("checkAdmin").checked=false;
+		  			document.getElementById("checkTrainer").checked=false;
+		  			document.getElementById("checkDTI").checked=false;
+		  			document.getElementById("checkPYC").checked=false;
+		  			document.getElementById("checkADU").checked=false;
+		  			document.getElementById("checkSEDE").checked=false;
+		  			document.getElementById("checkSALA").checked=false;
+		  			document.getElementById("checkSALA2").checked=false;
+		  			document.getElementById("checkADPYC").checked=false;
+			    break;
+			  	case "Sede":
+		  			document.getElementById("inNombreSede").value="";
+		  			document.getElementById("inDirSede").value="";
+		  			document.getElementById("inAfoSede").value=0;
+			    break;
+			  	case "Sala":
+		  			document.getElementById("inNomSala").value="";
+		  			document.getElementById("inAfoSala").value=0;
+			    break;
+			  	case "Plan":
+					document.getElementById("inNomPlan").value="";
+		  			document.getElementById("inInsPLan").value=0;
+		  			document.getElementById("inMenPLan").value=0;
+		  			document.getElementById("inMantPLan").value=0;
+		  			document.getElementById("caractToAdd").value="";
+					$.ajax({
+				        type: "POST",
+				        url: "/SmartAppG5/planes/getDefault",
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#tablaCaractPlan").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
+			  	case "Clase":
+		  			document.getElementById("inNomClase").value="";
+		  			document.getElementById("inDurClase").value="";
+		  			document.getElementById("inDescClase").value="";
+		  			document.getElementById("selectDia").value="0";
+		  			document.getElementById("selectHora").value="";
+		  			document.getElementById("selectSedeclase").value="";
+		  			$.ajax({
+				        type: "POST",
+				        url: "/SmartAppG5/clases/getDefault",
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#tablaCaractClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+					var url = "/SmartAppG5/clases/getDefaultSala";
+					$.ajax({
+				        type: "POST",
+				        url: url,
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#selectSalasClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
+			  	case "Clase":
+		  			document.getElementById("inNomEquipo").value="";
+					var url = "/SmartAppG5/clases/getDefaultSala";
+					$.ajax({
+				        type: "POST",
+				        url: url,
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#selectSalasClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
+			} 
+		};
+		function crear(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
 
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+        	var form = "#formCrear" + parametro;
+		    
+		    //Switch Parametro
+		    switch(parametro) {
+		  		case "Usuario":
+	    			var result = setRolesyPermisos();
+	    			document.getElementById("AddUserRut").value =$("#userRut").val() + ":" + $("#AddUserSede").val();
+	    			urlForm = "/SmartAppG5/usuarios/addUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/addSede";
+			    break;
+			  	case "Sala":
+	    			urlForm = "/SmartAppG5/salas/addSala";
+			    break;
+			  	case "Plane":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+	    			urlForm = "/SmartAppG5/planes/addPlan";
+	    			parametro = "Plan";
+			    break;
+			  	case "Clase":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+	    			urlForm = "/SmartAppG5/clases/addClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/addEquipo";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataForm=$(form).serialize();
+			console.log(dataForm);
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataForm,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var msj = parametro + " con id: " + data.split("/")[0] + " registrado correctamente el " + data.split("/")[1] + " a las : " + data.split("/")[2];
+			        var head =parametro + " registrado";
+		        	document.getElementById("labelRegistroOkHead").innerHTML = head;
+		        	document.getElementById("mensajeInternoModalOk").innerHTML =msj;
+		        	$('#modalCargando').modal('hide');
+		        	reset(parametro);
+		        	$('#modalRegistroOk').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelRegistroKoHead").innerHTML = "Error al Eliminar";
+		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
+		
+		function delet(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
+
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+		    
+		    //Switch Parametro
+		    switch(parametro.split(":")[0]) {
+		  		case "Usuario":
+	    			urlForm = "/SmartAppG5/usuarios/deleteUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/deleteSede";
+			    break;
+			  	case "Sala":
+	    			urlForm = "/SmartAppG5/salas/deleteSala";
+			    break;
+			  	case "Plan":
+	    			urlForm = "/SmartAppG5/planes/deletePlan";
+			    break;
+			  	case "Clase":
+	    			urlForm = "/SmartAppG5/clases/deleteClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/deleteEquipo";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataRequest={
+					"id" : parametro.split(":")[1]
+			}
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataRequest,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var msj = parametro.split(":")[0] + " con id: " + data.split("/")[0] + " eliminad@ correctamente el " + 
+		        		data.split("/")[1] + " a las : " + data.split("/")[2];
+		        	if(parametro.split(":")[0] == 'Sede'){
+		        		msj = msj + " Igualmente se eliminaron las " + data.split("/")[3] + " salas asociadas";
+		        	}
+			        var head =parametro.split(":")[0] + " Eliminad@";
+		        	document.getElementById("labelRegistroOkHead").innerHTML = head;
+		        	document.getElementById("mensajeInternoModalOk").innerHTML =msj;
+		        	var idDel= 'tr:'+data.split("/")[0];
+		        	$('#modalCargando').modal('hide');
+		        	document.getElementById(idDel).style.display='none';
+		        	$('#modalRegistroOk').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelRegistroKoHead").innerHTML = "Error al Eliminar";
+		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
 	/*]]>*/
 	</script>
 </body>

@@ -40,10 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/home").authenticated()
         .and()  
         .formLogin().failureHandler(authenticationFailureHandler())
-        .loginPage("/login")  
+        .loginPage("/login")
         .and()  
         .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        .logoutSuccessUrl("/home");
+        http.csrf().disable();
     }
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {

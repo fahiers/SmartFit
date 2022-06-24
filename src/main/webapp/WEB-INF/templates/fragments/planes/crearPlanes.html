@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="crearPlan" >
+			<div th:with="msjCabezeraModal='Guardando Plan',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<form th:action="@{/planes/addPLan}" method="post" id="formCrearPlane" th:object="${newPlan}" class="container cuadroBNS col-5 formCreate">
+				<div class="row">
+					<p id="addPlanP" class="col tituloForm">Añadir Plan</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomPlan" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Inscripcion</p> <input id="inInsPLan" type="number" class="col-7" th:field="*{inscripcion}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Mensualidad</p> <input id="inMenPLan" type="number" class="col-7" th:field="*{mensualidad}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Mantenimiento</p> <input id="inMantPLan" type="number" class="col-7" th:field="*{mantenimiento}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Caracteristicas</p>
+			    	<input id="caractToAdd" type="text" class="col-5" onChange="habilitarBtnCaract()"/>
+			    	<input type="button" onclick="addCaract()" class="col-2 centroForm btn btn-dark" id="btnSendCaract" value="Agregar" disabled/>
+				</div>
+				<input id="caractAddedToSend" type="hidden" th:field="*{caracteristicas}" value = ""/>
+				<div class="row">
+					<div id="tablaCaractPlan">
+							<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+							<input id="caractAdded" type="hidden" value = ""/>
+							<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
+					</div>
+				</div>
+				<div class="col">
+			    		<input type="button" onclick="crear('Plane')" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

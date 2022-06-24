@@ -1,0 +1,5 @@
+<option th:if="${not #lists.isEmpty(usuarios)}" value="" selected disabled hidden>Seleccione un usuario</option>
+<option th:if="${not #lists.isEmpty(usuarios)}" th:each="user : ${usuarios}" th:value="${user.rut}" 
+		th:text="${user.nombre+' '+user.apellido+' Rut:'+ user.rut}"></option>
+<option th:unless="${not #lists.isEmpty(usuarios)}" value="0">Sede Sin Usuarios</option>
+

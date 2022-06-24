@@ -1,0 +1,26 @@
+<div th:if="${not #lists.isEmpty(allSalas)}">
+	<p id="verSalasP" class="col tituloVer" th:text="${'Salas Registradas en Sede : ' + sede.nombre}"></p>
+    <table class="table table-dark tablaVer" id="tablaSalas">
+        <tr>
+            <th>Nombre</th>
+            <th>Sede</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th colspan="3">Opciones</th>
+        </tr>
+        <tr th:each="sala : ${allSalas}" th:id="${'tr:'+sala.id}">
+            <td th:text="${sala.nombre}"></td>
+            <td th:text="${sede.nombre}"></td>
+            <td th:text="${sala.tipo}"></td>
+            <td th:text="${sala.estado}"></td>
+			<td colspan="3">
+				<button th:id="${'Sala:'+sala.id}" type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Equipos</button>
+				<button th:id="${'Sala:'+sala.id}" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
+				<button th:id="${'Sala:'+sala.id}" onclick="delet(this.id)" type="button" class="btn btn-danger btnVerDel">Borrar</button>
+			</td>
+        </tr>
+    </table>
+</div>
+<div th:unless="${not #lists.isEmpty(allSalas)}">
+	<p id="verSalasP" class="col tituloVer" th:text="${'No existen Salas Registradas en Sede : ' + sede.nombre}"></p>
+</div>

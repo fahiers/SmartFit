@@ -60,5 +60,9 @@ public class AppConfig implements WebMvcConfigurer {
 	        registry.addResourceHandler("sedes/resource/**").addResourceLocations("WEB-INF/resources/");
 	        registry.addResourceHandler("salas/resource/**").addResourceLocations("WEB-INF/resources/");
 	        registry.addResourceHandler("miSede/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("planes/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("clases/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("equipos/resource/**").addResourceLocations("WEB-INF/resources/");
+	        registry.addResourceHandler("reportes/resource/**").addResourceLocations("WEB-INF/resources/");
 	    }
 }

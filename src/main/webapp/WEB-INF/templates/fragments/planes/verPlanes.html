@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="verPlanes">
+			<div th:with="msjCabezeraModal='Cargando Caracteristicas',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<div th:if="${not #lists.isEmpty(allPlanes)}">
+			<p id="verSedesP" class="col tituloVer">Planes Registrados</p>
+		    <table class="table table-dark tablaVer" id="tablaPlanes">
+		        <tr>
+		            <th>Nombre</th>
+		            <th>Inscripcion</th>
+		            <th>Mensualidad</th>
+		            <th>Mantenimiento</th>
+		            <th colspan="3">Opciones</th>
+		        </tr>
+		        <tr th:each="plan : ${allPlanes}" th:id="${'tr:'+ plan.id}">
+		            <td th:text="${plan.nombre}"></td>
+		            <td th:text="${'$' + plan.inscripcion}"></td>
+		            <td th:text="${'$' + plan.mensualidad}"></td>
+		            <td th:text="${'$' + plan.mantenimiento}"></td>
+					<td colspan="3">
+						<button th:id="${'Plan:'+plan.id}" type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Caracteristicas</button>
+						<button th:id="${'Plan:'+plan.id}" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
+						<button th:id="${'Plan:'+plan.id}" onclick="delet(this.id)" type="button" class="btn btn-danger btnVerDel">Borrar</button>
+					</td>
+		        </tr>
+		    </table>
+		</div>
+		</div>
+	</body>
+</html>

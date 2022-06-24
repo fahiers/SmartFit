@@ -70,3 +70,32 @@ footer {
 #logo{
 	height:  3.2vw;
 }
+.btnVerRyP, .btnVerEdit{
+	margin-right: 0.5vw;
+}
+
+#divSelectSede{
+	width: 50%;
+	margin-left: 25%;
+}
+.tituloVerPrev{
+	color:#ffffff;
+	font-size: 1.4vw;
+}
+#selectSede{
+	margin-right: 0.5%;
+}
+#selectHora{
+	padding-right: 0;
+}
+
+#tituloFiltros{
+	font-size: 3vw;
+}
+#divFiltrosReporte{
+	padding-bottom: 1vw;
+}
+.btnReport{
+	margin-bottom: 1%;
+	margin-left: 5%;
+}

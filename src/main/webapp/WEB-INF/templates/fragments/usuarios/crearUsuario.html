@@ -4,36 +4,40 @@
 	</head>
 	<body>
 		<div class="bodyFragments" th:fragment="crearUsuario" >
-		<link th:href="@{resource/css/usuarios/crearUsuario.css}" rel="stylesheet"/>
-			<form th:action="@{/usuarios/addUser}" method="post" id="formCrearUsuario" onsubmit="setRolesyPermisos();" th:object="${newUser}" class="container cuadroBNS col-5 formCreate">
+			<div th:with="msjCabezeraModal='Guardando Usuario',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<form th:action="@{/usuarios/addUser}" method="post" id="formCrearUsuario" th:object="${newUser}" class="container cuadroBNS col-5 formCreate">
 				<div class="row">
 					<p id="addUserP" class="col tituloForm">Añadir Usuario</p>
 				</div>
 				<div class="row">
-					<p class="col-2">Nombre</p> <input type="text" class="col-8" th:field="*{nombre}" required/>
+					<p class="col-2">Nombre</p> <input id="AddUserNombre"type="text" class="col-8" th:field="*{nombre}" th:text="*{nombre}"required/>
 				</div>
 				<div class="row">
-			    	<p class="col-2">Apellido</p> <input type="text" class="col-8" th:field="*{apellido}" required />
+			    	<p class="col-2">Apellido</p> <input id="AddUserApellido" type="text" class="col-8" th:field="*{apellido}" required />
 				</div>
 				<div class="row">
-			    	<p class="col-2">Correo</p> <input type="text" class="col-8" th:field="*{correo}" required />
+			    	<p class="col-2">Correo</p> <input id="AddUserCorreo" type="text" class="col-8" th:field="*{correo}" required />
 				</div>
 				<div class="row">
-			    	<p class="col-2">Rut</p> <input type="text" class="col-8" th:field="*{rut}" required />
+			    	<p class="col-2">Rut</p> <input id="userRut" type="text" class="col-8" required />
 				</div>
 				<div class="row">
-			    	<p class="col-2">Password</p> <input type="password" name="password" th:field="*{password}" class="col-8" required />
+			    	<p class="col-2">Password</p> <input id="AddUserPass" type="password" name="password" th:field="*{password}" class="col-8" required />
 				</div>
 				<div class="row">
 			    	<p class="col-2">Estado</p>
-					<select th:field="*{activo}" class="col-8">
+					<select id="AddUserActivo" th:field="*{activo}" class="col-8">
 					    <option th:value="'false'" th:text="Inactivo"></option>
 					    <option th:value="'true'" th:text="Activo"></option>
 					</select>
 				</div>
 				<div th:if="${not #lists.isEmpty(allSedes)}" class="row">
 			    	<p class="col-2">Sede</p>
-					<select name="sedeString" class="col-8">
+					<select id="AddUserSede" name="sedeString" class="col-8">
 					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
 					</select>
 				</div>
@@ -83,10 +87,13 @@
 					  <label class="form-check-label" for="flexCheckDefault">Administrar Planes y Clases</label>
 					</div>
 				</div>
-				<input id="rolId" type="hidden" name="roles" th:field="*{roles}" class="col-8" value=""/>
-				<input id="permId" type="hidden" name="permisos" th:field="*{permisos}" class="col-8" value=""/>
+				<input id="AddUserRolId" type="hidden" name="roles" th:field="*{roles}" class="col-8" value=""/>
+				<input id="AddUserPermId" type="hidden" name="permisos" th:field="*{permisos}" class="col-8" value=""/>
+				<input id="AddUserRut" type="hidden" name="permisos" th:field="*{rut}" class="col-8" value=""/>
+				
 				<div class="col">
-			    		<input type="submit" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+			    		<input  onclick="crear('Usuario')" type="button" class="col centroForm btn btn-dark btnSendForm" 
+						id="btnSend" value="Ingresar"/>
 				</div>
 			</form>
 		</div>

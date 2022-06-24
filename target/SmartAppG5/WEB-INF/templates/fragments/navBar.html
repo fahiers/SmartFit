@@ -9,40 +9,81 @@
 		<div class="container-xxl"  id="navBar">
 			<div class="row">
 				<div class="col-12">
-					<img th:src="@{resource/img/logos/smartApp.png}" alt="thFoto" height="50px" id="logo"/>
+					<img th:src="@{resource/img/logos/smartApp.png}" alt="thFoto" id="logo"/>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-6">
+				<div class="col-8">
 					<ul id="ulNavBar" class="nav nav-tabs">
 						<li class="nav-item itemNav">
-					    <a id="navLinkHome" class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+					    <a id="navLinkHome" class="nav-link itemNavLink" aria-current="page" th:href="@{/home}">Home</a>
 					 	</li>
 					  	<li class="nav-item dropdown itemNav">
 					    	<a id="navLinkUsers" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Usuarios</a>
-					    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
-					      <li><a class="dropdown-item internItemDrop" th:href="@{/usuarios/crearUsuario}">Crear Usuario</a></li>
-					      <li><hr class="dropdown-divider"></li>
-					      <li><a class="dropdown-item internItemDrop" href="#">Ver Usuarios</a></li>
-					      <li><hr class="dropdown-divider"></li>
-					      <li><a class="dropdown-item internItemDrop" href="#">Crear Administrador</a></li>
-					    </ul>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/usuarios/crearUsuario}">Crear Usuario</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/usuarios/verUsuarios}">Ver Usuarios</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
+						</li>
+						<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkSedes" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Sedes</a>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/sedes/crearSede}">Crear Sede</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/sedes/verSedes}">Ver Sedes</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
+						</li>
+						<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkSalas" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Salas</a>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/salas/crearSala}">Crear Sala</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/salas/verSalas}">Ver Salas</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
+						</li>
+						<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkPlanes" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Planes</a>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/planes/crearPlan}">Crear Plan</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/planes/verPlanes}">Ver Planes</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
+						</li>
+						<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkClases" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Clases</a>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/clases/crearClase}">Crear Clase</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/clases/verClases}">Ver Clases</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
+						</li>
+						<li class="nav-item dropdown itemNav">
+					    	<a id="navLinkEquipos" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Equipos</a>
+						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/crearEquipos}">Crear Equipo</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/crearEquipos}">Ver Equipos</a></li>
+						      <li><hr class="dropdown-divider"></li>
+						    </ul>
 						</li>
 						<li class="nav-item itemNav ">
-						  <a id="navLinkSedes" class="nav-link itemNavLink" href="#">Sedes</a>
-						</li>
-						<li class="nav-item itemNav ">
-						  <a id="navLinkPlanes" class="nav-link itemNavLink" href="#">Planes</a>
-						</li>
-						<li class="nav-item itemNav ">
-						  <a id="navLinkClases" class="nav-link itemNavLink" href="#">Clases</a>
+						  <a id="navLinkMiSede" class="nav-link itemNavLink" th:href="@{/miSede/show}">MiSede</a>
 						</li>
 					</ul>
 				</div>
-				<div class="col-6" id="divMsgWelcome">
-					<label id="msgWelcome" th:text="${'¡Bienvenido ' + #strings.capitalize(usuario.nombre) + ' ' + #strings.capitalize(usuario.apellido) + '!'}"/>
+				<div class="col-3" id="divMsgWelcome">
+					<label id="msgWelcome" th:text="${'¡Bienvenido ' + #strings.capitalize(usuario.nombre) + ' ' + #strings.capitalize(usuario.apellido) + '!'}"/></label>
 					<img th:src="@{resource/img/userDefault.png}" alt="thFoto" height="30px" id="fotoUser"/>
 				</div>
+				<form method="post" th:action="@{/logout}" class="col-1">
+			    		<input  type="submit" class="btn btn-dark" id="btnLogout" value="Salir"/>
+				</form>
 			</div>
 		</div>
     </div>

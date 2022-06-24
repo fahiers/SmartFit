@@ -14,6 +14,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
 @Service
+@Order(1)
 public class FireBaseIniciador {
 	
 	@PostConstruct
@@ -25,7 +26,6 @@ public class FireBaseIniciador {
 			try {
 				options = new FirebaseOptions.Builder()
 						  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-						  .setDatabaseUrl("https://smartapp-3f7fc-default-rtdb.firebaseio.com")
 						  .build();
 
 				FirebaseApp.initializeApp(options);

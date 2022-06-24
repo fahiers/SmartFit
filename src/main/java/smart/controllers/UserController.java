@@ -70,10 +70,12 @@ public class UserController {
 	}
 	
 	@PostMapping("/addUser")
-	public String create(@ModelAttribute Usuario user, @RequestParam(name="sedeString") String sede) throws InterruptedException, ExecutionException {
+	public String create(@ModelAttribute Usuario user) throws InterruptedException, ExecutionException {
 		user.setPassword(pass.encode(user.getPassword()));
-		user.setSede(crudService.getDocRef("sedes", sede));
-		return crudService.create(user,user.getRut());
+		user.setSede(crudService.getDocRef("sedes", user.getRut().split(":")[1]));
+		user.setRut(user.getRut().split(":")[0]);
+		String respuesta= crudService.create(user,user.getRut());
+		return respuesta;
 	}
 	
 	@PostMapping("/readUser")
@@ -85,7 +87,7 @@ public class UserController {
 		return crudService.update(user,user.getRut());
 	}
 	@PostMapping("/deleteUser")
-	public String delete(@RequestHeader() String id) throws InterruptedException, ExecutionException {
+	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
 		return crudService.delete(id,Usuario.class);
 	}
 }

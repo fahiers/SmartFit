@@ -1,0 +1,13 @@
+<div th:if="${not #lists.isEmpty(caractList)}">
+	<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+	<input id="caractAddedPrev" type="hidden" th:value = "${caractList}" class="col-5"/>
+	<input id="caractAdded" type="hidden" th:value = "${caractString}" class="col-5"/>
+	<ul th:each="caract : ${caractList}" id="ulCaract">
+	  <li th:text="${caract}"></li>
+	</ul>
+</div>
+<div th:unless="${not #lists.isEmpty(caractList)}">
+	<input id="caractAdded" type="hidden" value = "" class="col-5"/>
+	<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+	<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
+</div>

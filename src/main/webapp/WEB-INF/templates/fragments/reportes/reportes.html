@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="reportes">
+			<div th:with="msjCabezeraModal='Cargando Informacion',msjCuerpoModal='Espere un Momento...'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="divFiltrosReporte" class="container cuadroBNS col-10 formCreate">
+				<div class="row filaReport">
+					<label id="tituloFiltros" class="col-12">Emision de reporte</label>
+				</div>
+				<div class="row filaReport">
+					<p class="col-1 textoFiltros">Desde</p>
+					<input type="date" class="col-3" id="desde" value="" th:min="${desde}" th:max="${hasta}" onChange="modificarDesde()">
+					<p class="col-1 textoFiltros">Hasta</p>
+					<input type="date" class="col-3" id="hasta" value="" th:min="${desde}" th:max="${hasta}" onChange="activarBtnReporte()">
+					<button id="btnEmitirSede" onclick="reporteSede()" type="button" class="btn btn-dark col-3 btnReport" disabled>Emitir Reporte por Sede</button>
+				</div>
+				<div class="row filaReport">
+					<p class="col-1 textoFiltros">Sede</p>
+					<select id="selectSedeclase" class="col-3" onChange="getMisUsuarios(this.options[this.selectedIndex].value)">
+						<option value="" selected disabled hidden>Seleccione una sede</option>
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+					<p class="col-1 textoFiltros">Usuario</p>
+					<select id="selectUsers" class="col-3" onChange="activarBtnReporte()" disabled>
+					    <option value=""> Seleccione una Sede Primero</option>
+					</select>
+					<button id="btnEmitirUser" onclick="reporteUser()" type="button" class="btn btn-dark col-3 btnReport" disabled>Emitir Reporte por Usuario</button>
+				</div>
+	        </div>
+			<div id="divResultadoReporte">
+	        </div>
+		</div>
+	</body>
+</html>

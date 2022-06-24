@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="verEquipos">
+			<div th:with="msjCabezeraModal='Cargando Equipos',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<div th:if="${not #lists.isEmpty(allEquipos)}">
+			<p id="verClasesP" class="col tituloVer">Equipos Registrados</p>
+		    <table class="table table-dark tablaVer" id="tablaClases">
+		        <tr>
+		            <th>Nombre</th>
+		            <th>Tipo</th>
+		            <th>Estado</th>
+		            <th colspan="3">Opciones</th>
+		        </tr>
+		        <tr th:each="equipo : ${allEquipos}" th:id="${'tr:'+ equipo.id}">
+		            <td th:text="${equipo.nombre}"></td>
+		            <td th:text="${equipo.tipo}"></td>
+		            <td th:text="${equipo.estado}"></td>
+					<td colspan="3">
+						<button th:id="${'Equipo:'+equipo.id}" type="button" class="btn btn-warning btnverExtras btnVerRyP">Cambiar Estado</button>
+						<button th:id="${'Equipo:'+equipo.id}" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
+						<button th:id="${'Equipo:'+equipo.id}" onclick="delet(this.id)" type="button" class="btn btn-danger btnVerDel">Borrar</button>
+					</td>
+		        </tr>
+		    </table>
+		</div>
+		</div>
+	</body>
+</html>

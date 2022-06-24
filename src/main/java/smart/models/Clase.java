@@ -3,8 +3,12 @@ package smart.models;
 import java.util.LinkedList;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 import org.springframework.data.annotation.Id;
+
+import com.google.cloud.firestore.DocumentReference;
 
 @Entity
 public class Clase {
@@ -13,8 +17,11 @@ public class Clase {
 	private String id;
 	private String nombre;
 	private String duracion;
-	private String horario;
-	private LinkedList<LinkedList<String>> descripcion;
+	private LinkedList<String> horarios;
+	private String descripcion;
+	@ManyToOne(fetch=FetchType.LAZY)
+	private DocumentReference sala;
+	
 	public String getId() {
 		return id;
 	}
@@ -33,17 +40,23 @@ public class Clase {
 	public void setDuracion(String duracion) {
 		this.duracion = duracion;
 	}
-	public String getHorario() {
-		return horario;
+	public LinkedList<String> getHorarios() {
+		return horarios;
 	}
-	public void setHorario(String horario) {
-		this.horario = horario;
+	public void setHorarios(LinkedList<String> horarios) {
+		this.horarios = horarios;
 	}
-	public LinkedList<LinkedList<String>> getDescripcion() {
+	public String getDescripcion() {
 		return descripcion;
 	}
-	public void setDescripcion(LinkedList<LinkedList<String>> descripcion) {
+	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	public DocumentReference getSala() {
+		return sala;
+	}
+	public void setSala(DocumentReference sala) {
+		this.sala = sala;
 	}
 	
 	

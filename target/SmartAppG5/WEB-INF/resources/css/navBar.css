@@ -3,6 +3,10 @@
   background-color:#000000;
   border-color:#000000;
   font-weight: bold;
+  top:0;
+  color:#FFFFFF;
+  position:fixed;
+  width:100%;
 }
 .itemNavLink{
   color: #ffffff;
@@ -12,7 +16,7 @@
   opacity: 0.7;
 }
 .itemInternNav{
-  margin-top:-4px !important;;
+  margin-top:-0.4vw !important;;
   background-color:#000000;
 }
 .internItemDrop{
@@ -36,11 +40,16 @@
   color:#ffffff;
 }
 #fotoUser{
-  margin-top: -10px;
+  margin-top: -0.5vw;
   background-color: #ffffff;
-  border-radius: 25px;
+  border-radius: 2.5vw;
 }
 
 #logo{
-  margin-top: 5px;
+  margin-top: 0.3vw;
+}
+#btnLogout{
+  margin-top: -0.5vw;
+  border-radius: 2vw;
+
 }

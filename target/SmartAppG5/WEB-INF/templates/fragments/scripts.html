@@ -6,31 +6,82 @@
 <body>
 	<script th:fragment="scripts" >
 	/*<![CDATA[*/
+		
 		function setUsername(){
 			   document.getElementById('hidden').value = 
 				   (document.getElementById('rut').value+':'+
 				   document.getElementById('nom').value+':'+
 				   document.getElementById('sur').value).toLowerCase();
-		}
-	
-		function setRolesyPermisos(){
-			var roles= "[ ";
-			var permisos ="[ ";
-			if(document.getElementById("checkAdmin").checked) roles+=" ADMIN,";
-			if(document.getElementById("checkTrainer").checked) roles+=" ENTRENADOR,";
-			if(document.getElementById("checkDTI").checked) roles+=" PERSONALDTI,";
-			if(document.getElementById("checkPYC").checked) permisos+=" MOSTRAR,";
-			if(document.getElementById("checkADU").checked) permisos+=" USUARIOS,";
-			if(document.getElementById("checkSEDE").checked) permisos+=" SEDES,";
-			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
-			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
-			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
-			roles.replace(/.$/, ']');
-			permisos.replace(/.$/, ']');
-			document.getElementById("rolId").value=roles;
-			document.getElementById("permId").value=permisos;
-		}
-		
+		};
+		function addCaract() {
+			var url = "/SmartAppG5/planes/addCaract";
+			var caractNew=document.getElementById('caractToAdd').value;
+			var caracteristicas=document.getElementById('caractAdded').value;
+			var dataReq= {
+					"newC": caractNew,
+					"caract" : caracteristicas
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		  			document.getElementById("caractToAdd").value="";
+		            $("#tablaCaractPlan").html(data);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+		function getSalas(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/salas/obtenerSalas";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#divReplaceSalas").html(data);
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+        
+        function getMisSalas(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/miSede/changeSede";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#divReplaceMiSedeSalas").html(data);
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
 		function getActive(){
 			var activo = document.getElementById('pagina').value.split(":");
 			switch(activo[0]){
@@ -49,9 +100,254 @@
 				case "clases":
 					document.getElementById('navLinkClases').className += " active itemNavActive";
 				    break;
+				case "salas":
+					document.getElementById('navLinkSalas').className += " active itemNavActive";
+					break;
+				case "equipos":
+					document.getElementById('navLinkEquipos').className += " active itemNavActive";
+				    break;
+				case "miSede":
+					document.getElementById('navLinkMiSede').className += " active itemNavActive";
+					break;
 			}
-		}
+		};
+		function ocuparSala(parametro){
+        	$('#modalCargando').modal('show');
+			var sala= parametro.split(":")[0];
+			var user= parametro.split(":")[1];
+		
+			var url = "/SmartAppG5/miSede/ocupar";
+			var dataReq= {
+					"salaId" : sala,
+					"userId" : user
+			}
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+					window.location.reload(false);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+		
+		};
+		function liberarSala(parametro){
+        	$('#modalCargando').modal('show');
+			var user= parametro.split(":")[1];
+		
+			var url = "/SmartAppG5/miSede/liberar";
+			var dataReq= {
+					"userId" : user
+			}
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+					window.location.reload(false);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+		
+		};
+		function setRolesyPermisos(){
+			var roles= "";
+			var permisos ="";
+			if(document.getElementById("checkAdmin").checked) roles+=" ADMIN,";
+			if(document.getElementById("checkTrainer").checked) roles+=" ENTRENADOR,";
+			if(document.getElementById("checkDTI").checked) roles+=" PERSONALDTI,";
+			if(document.getElementById("checkPYC").checked) permisos+=" MOSTRAR,";
+			if(document.getElementById("checkADU").checked) permisos+=" USUARIOS,";
+			if(document.getElementById("checkSEDE").checked) permisos+=" SEDES,";
+			if(document.getElementById("checkSALA").checked) permisos+=" SALA_LVL1,";
+			if(document.getElementById("checkSALA2").checked) permisos+=" SALA_LVL2,";
+			if(document.getElementById("checkADPYC").checked) permisos+=" EXTRAS,";
+			if(roles != ""){
+				roles = roles.slice(1,-1);
+			}
+			if(roles != ""){
+				permisos = permisos.slice(1,-1);
+			}
+			document.getElementById("AddUserRolId").value=roles;
+			document.getElementById("AddUserPermId").value=permisos;
+			return "ok";
+		};
+		function reset(tipoForm){
+			switch(tipoForm) {
+		  		case "Usuario":
+		  			document.getElementById("AddUserNombre").value="";
+		  			document.getElementById("AddUserApellido").value="";
+		  			document.getElementById("AddUserCorreo").value="";
+		  			document.getElementById("userRut").value="";
+		  			document.getElementById("AddUserPass").value="";
+		  			document.getElementById("checkAdmin").checked=false;
+		  			document.getElementById("checkTrainer").checked=false;
+		  			document.getElementById("checkDTI").checked=false;
+		  			document.getElementById("checkPYC").checked=false;
+		  			document.getElementById("checkADU").checked=false;
+		  			document.getElementById("checkSEDE").checked=false;
+		  			document.getElementById("checkSALA").checked=false;
+		  			document.getElementById("checkSALA2").checked=false;
+		  			document.getElementById("checkADPYC").checked=false;
+			    break;
+			  	case "Sede":
+		  			document.getElementById("inNombreSede").value="";
+		  			document.getElementById("inDirSede").value="";
+		  			document.getElementById("inAfoSede").value=0;
+			    break;
+			  	case "Sala":
+		  			document.getElementById("inNomSala").value="";
+		  			document.getElementById("inAfoSala").value=0;
+			    break;
+			  	case "Plan":
+					document.getElementById("inNomPlan").value="";
+		  			document.getElementById("inInsPLan").value=0;
+		  			document.getElementById("inMenPLan").value=0;
+		  			document.getElementById("inMantPLan").value=0;
+		  			document.getElementById("caractToAdd").value="";
+					$.ajax({
+				        type: "POST",
+				        url: "/SmartAppG5/planes/getDefault",
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#tablaCaractPlan").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
+			} 
+		};
+		function crear(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
 
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+        	var form = "#formCrear" + parametro;
+		    
+		    //Switch Parametro
+		    switch(parametro) {
+		  		case "Usuario":
+	    			var result = setRolesyPermisos();
+	    			document.getElementById("AddUserRut").value =$("#userRut").val() + ":" + $("#AddUserSede").val();
+	    			urlForm = "/SmartAppG5/usuarios/addUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/addSede";
+			    break;
+			  	case "Sala":
+	    			urlForm = "/SmartAppG5/salas/addSala";
+			    break;
+			  	case "Plane":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+	    			urlForm = "/SmartAppG5/planes/addPlan";
+	    			parametro = "Plan";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataForm=$(form).serialize();
+			console.log(dataForm);
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataForm,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var msj = parametro + " con id: " + data.split("/")[0] + " registrado correctamente el " + data.split("/")[1] + " a las : " + data.split("/")[2];
+			        var head =parametro + " registrado";
+		        	document.getElementById("labelRegistroOkHead").innerHTML = head;
+		        	document.getElementById("mensajeInternoModalOk").innerHTML =msj;
+		        	$('#modalCargando').modal('hide');
+		        	reset(parametro);
+		        	$('#modalRegistroOk').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelRegistroKoHead").innerHTML = "Error al Eliminar";
+		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
+		
+		function delet(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
+
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+		    
+		    //Switch Parametro
+		    switch(parametro.split(":")[0]) {
+		  		case "Usuario":
+	    			urlForm = "/SmartAppG5/usuarios/deleteUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/deleteSede";
+			    break;
+			  	case "Sala":
+	    			urlForm = "/SmartAppG5/salas/deleteSala";
+			    break;
+			  	case "Plan":
+	    			urlForm = "/SmartAppG5/planes/deletePlan";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataRequest={
+					"id" : parametro.split(":")[1]
+			}
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataRequest,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var msj = parametro.split(":")[0] + " con id: " + data.split("/")[0] + " eliminad@ correctamente el " + 
+		        		data.split("/")[1] + " a las : " + data.split("/")[2];
+		        	if(parametro.split(":")[0] == 'Sede'){
+		        		msj = msj + " Igualmente se eliminaron las " + data.split("/")[3] + " salas asociadas";
+		        	}
+			        var head =parametro.split(":")[0] + " Eliminad@";
+		        	document.getElementById("labelRegistroOkHead").innerHTML = head;
+		        	document.getElementById("mensajeInternoModalOk").innerHTML =msj;
+		        	var idDel= 'tr:'+data.split("/")[0];
+		        	$('#modalCargando').modal('hide');
+		        	document.getElementById(idDel).style.display='none';
+		        	$('#modalRegistroOk').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelRegistroKoHead").innerHTML = "Error al Eliminar";
+		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
 	/*]]>*/
 	</script>
 </body>

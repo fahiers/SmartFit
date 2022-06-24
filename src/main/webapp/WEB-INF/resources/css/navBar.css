@@ -36,6 +36,7 @@
   font-weight: bold;
 }
 #divMsgWelcome{
+  margin-top: 1%;
   text-align: right;
   color:#ffffff;
 }
@@ -47,4 +48,10 @@
 
 #logo{
   margin-top: 0.3vw;
+}
+#btnLogout{
+  font-size: 1.3vw;
+  margin-top: -0.5vw;
+  border-radius: 1.5vw;
+  margin-left: 20%;
 }

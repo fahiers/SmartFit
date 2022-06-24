@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.cloud.firestore.DocumentReference;
+
 import smart.servicios.CRUDServices;
+import smart.models.Sala;
 import smart.models.Sede;
 import smart.models.Usuario;
 import smart.security.UserPrincipal;
@@ -38,6 +42,7 @@ public class SedeController {
         model.addAttribute("usuario", user);
         model.addAttribute("pagina", "sedes:crear");
         Sede newSede = new Sede();
+        newSede.setSalas(new LinkedList<DocumentReference>());
         model.addAttribute("newSede", newSede);
         return new ModelAndView("home");
 	}
@@ -72,7 +77,14 @@ public class SedeController {
 		return crudService.update(sede,sede.getId());
 	}
 	@PostMapping("/deleteSede")
-	public String delete(@RequestHeader() String id) throws InterruptedException, ExecutionException {
-		return crudService.delete(id,Sede.class);
+	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
+		Sede sede = (Sede) crudService.read(id,Sede.class);
+        int contador = 0;
+        for (DocumentReference sala : sede.getSalas()) {
+			crudService.delete(sala.get().get().toObject(Sala.class).getId(),Sala.class);
+			contador+=1;
+		}
+        String respuesta = crudService.delete(id,Sede.class) + "/" + contador;
+		return respuesta;
 	}
 }

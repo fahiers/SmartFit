@@ -7,8 +7,9 @@
 		<script th:src="@{resource/js/popper.min.js}"></script>
 		<script th:src="@{resource/js/bootstrap.min.js}"></script>
 		<link th:href="@{resource/css/main.css}" rel="stylesheet"/>
-		<link th:href="@{resource/css/miSede.css}" rel="stylesheet"/>
+		<link th:href="@{resource/css/modales.css}" rel="stylesheet"/>
 		<link th:replace="fragments/navBar :: cssHeader"/>
+		<link th:href="@{resource/css/miSede.css}" rel="stylesheet"/>
 		<title>Home SmartApp</title>
 	</head>
 	<body class="backgroundSmart"  onload="getActive();">
@@ -36,8 +37,29 @@
 				<div id="divReplaceVerSala" th:replace="fragments/salas/verSalas :: verSalas"></div>
             </th:block>
             <th:block th:case="'miSede:ver'">
-				<link th:href="@{resource/css/modales/cargando.css}" rel="stylesheet"/>
-				<div id="divReplaceVerMiSede" th:replace="fragments/miSede :: miSede"></div>
+				<div id="divReplaceVerMiSede" th:replace="fragments/miSede/miSede :: miSede"></div>
+            </th:block>
+            <th:block th:case="'planes:crear'">
+				<div id="divReplaceCrearPlanes" th:replace="fragments/planes/crearPlanes :: crearPlan"></div>
+            </th:block>
+            <th:block th:case="'planes:ver'">
+				<div id="divReplaceVerPlanes" th:replace="fragments/planes/verPlanes :: verPlanes"></div>
+            </th:block>
+            <th:block th:case="'clases:crear'">
+				<div id="divReplaceCrearClases" th:replace="fragments/clases/crearClases :: crearClase"></div>
+            </th:block>
+            <th:block th:case="'clases:ver'">
+				<div id="divReplaceVerClases" th:replace="fragments/clases/verClases :: verClases"></div>
+            </th:block>
+            
+            <th:block th:case="'equipos:crear'">
+				<div id="divReplaceCrearEquipos" th:replace="fragments/equipos/crearEquipo :: crearEquipo"></div>
+            </th:block>
+            <th:block th:case="'equipos:ver'">
+				<div id="divReplaceVerEquipos" th:replace="fragments/equipos/verEquipos :: verEquipos"></div>
+            </th:block>
+            <th:block th:case="'reportes:ver'">
+				<div id="divReplaceVerReportes" th:replace="fragments/reportes/reportes :: reportes"></div>
             </th:block>
         </th:block>
 	</body>

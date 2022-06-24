@@ -57,24 +57,41 @@ public class SalaController {
 		this.user=((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         model.addAttribute("usuario", user);
         model.addAttribute("pagina", "salas:ver");
-        LinkedList<Object> objetos = crudService.getAllDocs(Sala.class);
-        LinkedList<Sala> salas = new LinkedList<>();
-        for (Object obj : objetos) {
-        	salas.add((Sala) obj);
+        LinkedList<Object> objSede = crudService.getAllDocs(Sede.class);
+        LinkedList<Sede> sedes = new LinkedList<>();
+        for (Object sede : objSede) {
+			sedes.add((Sede) sede);
 		}
+        model.addAttribute("allSedes",sedes);
         model.addAttribute("claseSede",Sede.class);
-        model.addAttribute("allSalas",salas);
         return new ModelAndView("home");
 	}
-	
+	@PostMapping("/obtenerSalas")
+		public ModelAndView getSalas(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException{
+			this.crudService = new CRUDServices();
+			Sede sede = (Sede) crudService.read(id, Sede.class);
+        	LinkedList<Sala> salas = new LinkedList<>();
+        	if(sede.getSalas()!=null) {
+            	for (DocumentReference sala : sede.getSalas()) {
+        			salas.add(sala.get().get().toObject(Sala.class));
+        		}
+        	}
+            model.addAttribute("allSalas",salas);
+            model.addAttribute("sede",sede);
+            return new ModelAndView("fragments/salas/verSalasSelect");
+		}
 	@PostMapping("/addSala")
-	public String create(@ModelAttribute Sala sala, @RequestParam(name="sedeString") String sede) throws InterruptedException, ExecutionException {
-		sala.setSede(crudService.getDocRef("sedes", sede));
+	public String create(@ModelAttribute Sala sala) throws InterruptedException, ExecutionException {
+		sala.setSede(crudService.getDocRef("sedes", sala.getId()));
 		DocumentReference newDoc= crudService.newDoc("salas");
 		sala.setId(newDoc.getId());
 		sala.setProfesores(new LinkedList<>());
 		Sede sedeObj = sala.getSede().get().get().toObject(Sede.class);
-		sedeObj.getSalas().add(newDoc);
+		if(sedeObj.getSalas() == null) {
+			sedeObj.setSalas(new LinkedList<DocumentReference>());
+		}else {
+			sedeObj.getSalas().add(newDoc);
+		}
 		crudService.update(sedeObj, sedeObj.getId());
 		return crudService.create(sala,sala.getId());
 	}
@@ -88,7 +105,12 @@ public class SalaController {
 		return crudService.update(sala,sala.getId());
 	}
 	@PostMapping("/deleteSala")
-	public String delete(@RequestHeader() String id) throws InterruptedException, ExecutionException {
+	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Sala sala = (Sala) crudService.read(id, Sala.class);
+		Sede sede = (Sede) crudService.read(sala.getSede().getId(), Sede.class);
+		sede.getSalas().remove(crudService.getDocRef("salas", id));
+		crudService.update(sede,sede.getId());
 		return crudService.delete(id,Sala.class);
 	}
 }
