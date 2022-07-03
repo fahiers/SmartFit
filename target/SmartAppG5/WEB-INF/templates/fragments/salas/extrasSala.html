@@ -1,0 +1,31 @@
+<div th:if="${not #lists.isEmpty(allEquipos)}" class="container">
+	<div class="row">
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Nombre'}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Tipo'}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Estado'}"></p><br>
+		</div>
+	</div>
+	<div th:each="equipo : ${allEquipos}" class="row">
+		<div class="col-4">
+			<p  class="textoLista" th:text="${equipo.nombre}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${equipo.tipo}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${equipo.estado}"></p><br>
+		</div>
+	</div>
+</div>
+<div th:unless="${not #lists.isEmpty(allEquipos)}" class="container">
+	<div class="row">
+		<div class="col-12">
+			<p  class="textoLista" th:text="${'Sala no tiene equipos que mostrar'}"></p><br>
+		</div>
+	</div>
+</div>

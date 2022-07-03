@@ -1,5 +1,6 @@
 package smart.servicios;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -20,6 +21,9 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+
+import smart.models.Equipo;
+import smart.models.Registro;
 import smart.models.Usuario;
 
 @Service
@@ -80,6 +84,15 @@ public class CRUDServices{
 		}
 		return objetos;
 	}
+	 public LinkedList<DocumentReference> getUserDocRef() throws InterruptedException, ExecutionException {
+		 db = FirestoreClient.getFirestore();
+		Iterable<DocumentReference> documentos = db.collection("usuarios").listDocuments();
+		LinkedList<DocumentReference> objetos = new LinkedList<>();
+		for (DocumentReference documentReference : documentos) {
+			objetos.add(documentReference);
+		}
+		return objetos;
+	}
 	 public LinkedList<Usuario> getAllUsersSede(DocumentReference sede) throws InterruptedException, ExecutionException {
 		 db = FirestoreClient.getFirestore();
 		 List<QueryDocumentSnapshot> documentos = db.collection("usuarios").whereEqualTo("sede", sede).get().get().getDocuments();
@@ -88,6 +101,32 @@ public class CRUDServices{
 			 usuarios.add(doc.toObject(Usuario.class));
 		 }
 		 return usuarios;
+	}
+	 public LinkedList<Registro> getRegistrosWhere(DocumentReference sede,DocumentReference user,String desde , String hasta) throws InterruptedException, ExecutionException {
+		db = FirestoreClient.getFirestore();
+		List<QueryDocumentSnapshot> documentos = db.collection("registros")
+				.whereEqualTo("sede", sede)
+				.whereEqualTo("usuario",user)
+				.whereGreaterThan("fecha",Timestamp.valueOf(desde+" 00:00:00"))
+				.whereLessThan("fecha",Timestamp.valueOf(hasta+" 23:59:59"))
+				.get().get().getDocuments();
+		LinkedList<Registro> registros = new LinkedList<>();
+		for(DocumentSnapshot reg: documentos) {
+				registros.add(reg.toObject(Registro.class));
+		}
+		 return registros;
+	}
+
+	 public LinkedList<Equipo> getEquiposWhere(DocumentReference sala) throws InterruptedException, ExecutionException {
+		db = FirestoreClient.getFirestore();
+		List<QueryDocumentSnapshot> documentos = db.collection("equipos")
+				.whereEqualTo("sala", sala)
+				.get().get().getDocuments();
+		LinkedList<Equipo> equipos = new LinkedList<>();
+		for(DocumentSnapshot eq: documentos) {
+				equipos.add(eq.toObject(Equipo.class));
+		}
+		 return equipos;
 	}
 	 public DocumentReference getDocRef(String coleccion, String id) {
 		 db=FirestoreClient.getFirestore();

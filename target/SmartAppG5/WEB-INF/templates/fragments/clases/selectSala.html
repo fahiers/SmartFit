@@ -1,0 +1,7 @@
+<p class="col-3">Sala</p>
+<select id="selectPrevioSalaenId" th:if="${not #lists.isEmpty(allSalas)}" class="col-7" onChange="setSalaEnId()">
+    <option th:each="sala : ${allSalas}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+</select>
+<select id="selectPrevioSalaenId" th:unless="${not #lists.isEmpty(allSalas)}" class="col-7" disabled>
+	<option value="" selected disabled hidden>Sede Sin Salas</option>
+</select>

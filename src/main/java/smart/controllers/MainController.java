@@ -42,7 +42,7 @@ public class MainController {
         model.addAttribute("usuario", new Usuario());
         return new ModelAndView("login");
     }
-
+	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
     public ModelAndView home(Model model) throws InterruptedException, ExecutionException {
 		Usuario user = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();

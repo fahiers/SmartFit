@@ -14,8 +14,8 @@
             <td th:text="${sala.tipo}"></td>
             <td th:text="${sala.estado}"></td>
 			<td colspan="3">
-				<button th:id="${'Sala:'+sala.id}" type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Equipos</button>
-				<button th:id="${'Sala:'+sala.id}" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
+				<button th:id="${'Sala:'+sala.id}" onclick="extras(this.id)" type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Equipos</button>
+				<button th:id="${'Sala:'+sala.id}" onclick="edit(this.id)" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
 				<button th:id="${'Sala:'+sala.id}" onclick="delet(this.id)" type="button" class="btn btn-danger btnVerDel">Borrar</button>
 			</td>
         </tr>

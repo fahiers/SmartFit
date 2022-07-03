@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+	<head>
+	<style>
+		@page {
+			size: letter;
+			margin: 0.5cm;
+		
+		}
+		#logo{
+		  height: 2cm;
+		  opacity: 0.5;
+		}
+		.contenedor{
+		  width: 19cm;
+		}
+		.contenedor2{
+		margin-left:1cm;
+		  width: 18cm;
+		}
+		.row{
+		  display: flex;
+		  margin-bottom: 0.5cm;
+		  flex-wrap: wrap;
+		  padding-left:1cm;
+		}
+		.col{
+		  flex:1 0 0%;
+		  width:5.76cm;
+		}
+		.col-2{
+		  width: 2.7cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		  flex:0 0 auto;
+		}
+		.col-3{
+		  width: 4.5cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		  flex:0 0 auto;
+		}
+		.col-6{
+		  flex: 0 0 auto;
+		  width: 9cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		}
+		
+		.col-7{
+		  width: 10.49cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		  flex:0 0 auto;
+		}
+		.col-8{
+		  width: 11.88cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		  flex:0 0 auto;
+		}
+		.col-9{
+		  flex:0 0 auto;
+		  width: 13.5cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		}
+		.col-12{
+		  flex: 0 0 auto;
+		  width: 18cm;
+		  padding-left: 0.5cm;
+		  padding-right: 0.5cm;
+		}
+		.textoInicial{
+			margin-left:5cm;
+		  text-align: center;
+		}
+		table{
+		  text-align: left;
+		}
+		.textoInicial{
+		  margin-top: 0.1cm;
+		  margin-top :1cm;
+		}
+		#pReporte{
+		  font-size: 24px;
+		}
+		#pdesdeHasta,#pSede{
+		  font-size: 20px;
+		}
+		.nombreTrabajador{
+		  font-size: 18px;
+		  text-decoration: underline;
+		  font-weight:bold;
+		  color:#fcb823;
+		}
+		.registrosUser{
+		   border: 2px solid #bdbdbd;
+		  margin-bottom: 1.5cm;
+        	page-break-inside: avoid;
+		}
+		#pSinRegistro{
+		  font-size: 24px;
+		  margin-left: 2cm;
+		}
+	</style>
+	</head>
+	<body>
+		<div class="contenedor"  id="divMain">
+			<div class="row">
+				<img class="col-3" src="http://localhost:8080/SmartAppG5/resource/img/logos/smartApp.png" alt="thFoto" id="logo"/>
+				<div class="col-6 textoInicial">
+					<p id="pReporte" th:text="${'Reporte Entrada-Salida'}"></p>
+					<p th:if="${desde==hasta}" id="pdesdeHasta" th:text="${'Fecha: '+desde}"></p>
+					<p th:unless="${desde==hasta}" id="pdesdeHasta" th:text="${'Desde: '+desde+' Hasta: '+hasta}"></p>
+					<p id="pSede" th:text="${'Sede: '+sede.nombre}"></p>
+					<p class="nombreTrabajador" th:if="${usuario!=''}" id="pSede" th:text="${'Usuario: '+usuario}"></p>
+				</div>
+			</div>
+			<div th:if="${not #lists.isEmpty(registros)}" th:each="par : ${registros}" class="contenedor2 registrosUser">
+				<p th:if="${tipo=='Sede'}"class="nombreTrabajador row" th:text="${'Usuario :'+par.getFirst.rut+' '+par.getFirst.nombre+'      '+ par.getFirst.apellido}"></p>
+				<div th:if="${not #lists.isEmpty(par.getSecond)}" class="row">
+					<table class="tablaCliente col-12">
+				        <tr>
+				            <th class="col-2">Fecha</th>
+				            <th class="col-2">Tipo</th>
+				            <th class="col">Sala</th>
+				        </tr>
+				        <tr th:each="registro : ${par.getSecond}">
+				            <td th:text="${#dates.format(registro.fecha, 'dd-MM-yyyy HH:mm')}"></td>
+				            <td th:text="${registro.tipo}"></td>
+				            <td th:text="${(registro.sala.get.get.toObject(claseSala)).nombre}"></td>
+				        </tr>
+				    </table>
+				</div>
+				<div th:unless="${not #lists.isEmpty(par.getSecond)}" class="row">
+					<table class="tablaSinRegistro col-12">
+				        <tr>
+				            <th class="col-2">Fecha</th>
+				            <th class="col-2">Tipo</th>
+				            <th class="col">Sala</th>
+				        </tr>
+				        <tr>
+				            <td class="sinRegistros" colspan="3">Usuario no presenta registros en sistema</td>
+				        </tr>
+				    </table>
+				</div>
+			</div>
+			<div th:unless="${not #lists.isEmpty(registros)}">
+					<p id="pSinRegistro">No existen registros para mostrar con los parametros actuales</p>
+			</div>
+		</div>
+	</body>
+	<footer>
+	</footer>
+</html>

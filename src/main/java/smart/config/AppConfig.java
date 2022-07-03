@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
@@ -25,6 +26,7 @@ public class AppConfig implements WebMvcConfigurer {
 	   @Autowired
 	   private ApplicationContext applicationContext;
 
+	  
 	   @Bean
 	   public SpringResourceTemplateResolver templateResolver() {
 	      SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();

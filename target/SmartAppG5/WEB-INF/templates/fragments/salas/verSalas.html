@@ -9,6 +9,10 @@
 			</div>
 			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
 			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<div th:with="tipoEdit='Sala'">
+				<div id="modalEdicion" th:replace="fragments/modals/modalEdicion :: modalEdicion"></div>
+				<div id="modalExtras" th:replace="fragments/modals/modalExtras :: modalExtras"></div>
+			</div>
 			<div id="divSelectSede" class="container row">
 				<p id="SelectSedePI" class="col tituloVerPrev col-3">Seleccione una Sede : </p>
 				<select id="selectSede" name="sedeString" class="col-6" onChange="getSalas(this.options[this.selectedIndex].value)">

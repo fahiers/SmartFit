@@ -1,0 +1,11 @@
+<div th:if="${not #lists.isEmpty(horariosList)}">
+	<p id="caractAddLabel" class="col-12 text-center"> Horarios Definidos</p>
+	<ul th:each="horario : ${horariosList}" id="ulCaract">
+	  <li th:text="${horario}"></li>
+	</ul>
+</div>
+<div th:unless="${not #lists.isEmpty(horariosList)}">
+	<input id="caractAdded" type="hidden" value = "" class="col-5"/>
+	<p id="caractAddLabel" class="col-12 text-center"> Horarios Definidos</p>
+	<p id="verCaractP" class="col" th:text="${'No hay horarios definidos'}"></p>
+</div>

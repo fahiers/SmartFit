@@ -89,6 +89,7 @@ public class MiSedeController {
 	public String ocupar(@RequestParam(name="salaId") String sala, @RequestParam(name="userId") String user) throws InterruptedException, ExecutionException {
 		Usuario userObj = (Usuario) crudService.read(user, Usuario.class);
 		Sala salaObj = (Sala) crudService.read(sala, Sala.class);
+		Date hoy = new Date();
 		if(userObj.getSalaActual()!=null) {
 			Sala salaPrevia = (Sala) crudService.read(userObj.getSalaActual().getId(), Sala.class);
 			salaPrevia.getProfesores().remove(crudService.getDocRef("usuarios", userObj.getRut()));

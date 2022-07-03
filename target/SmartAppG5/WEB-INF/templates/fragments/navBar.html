@@ -8,12 +8,16 @@
     	 <input type="hidden" id="pagina" th:value="${pagina}">
 		<div class="container-xxl"  id="navBar">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-9">
 					<img th:src="@{resource/img/logos/smartApp.png}" alt="thFoto" id="logo"/>
+				</div>
+				<div class="col-3" id="divMsgWelcome">
+					<label id="msgWelcome" th:text="${'¡Bienvenido ' + #strings.capitalize(usuario.nombre) + ' ' + #strings.capitalize(usuario.apellido) + '!'}"/></label>
+					<img th:src="@{resource/img/userDefault.png}" alt="thFoto" height="30px" id="fotoUser"/>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-8">
+				<div class="col-9">
 					<ul id="ulNavBar" class="nav nav-tabs">
 						<li class="nav-item itemNav">
 					    <a id="navLinkHome" class="nav-link itemNavLink" aria-current="page" th:href="@{/home}">Home</a>
@@ -66,22 +70,21 @@
 						<li class="nav-item dropdown itemNav">
 					    	<a id="navLinkEquipos" class="nav-link dropdown-toggle itemNavLink" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Equipos</a>
 						    <ul class="dropdown-menu itemInternNav" id="ulNavBar">
-						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/crearEquipos}">Crear Equipo</a></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/crearEquipo}">Crear Equipo</a></li>
 						      <li><hr class="dropdown-divider"></li>
-						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/crearEquipos}">Ver Equipos</a></li>
+						      <li><a class="dropdown-item internItemDrop" th:href="@{/equipos/verEquipos}">Ver Equipos</a></li>
 						      <li><hr class="dropdown-divider"></li>
 						    </ul>
 						</li>
 						<li class="nav-item itemNav ">
 						  <a id="navLinkMiSede" class="nav-link itemNavLink" th:href="@{/miSede/show}">MiSede</a>
 						</li>
+						<li class="nav-item itemNav ">
+						  <a id="navLinkMiSede" class="nav-link itemNavLink" th:href="@{/reportes/show}">Reportes</a>
+						</li>
 					</ul>
 				</div>
-				<div class="col-3" id="divMsgWelcome">
-					<label id="msgWelcome" th:text="${'¡Bienvenido ' + #strings.capitalize(usuario.nombre) + ' ' + #strings.capitalize(usuario.apellido) + '!'}"/></label>
-					<img th:src="@{resource/img/userDefault.png}" alt="thFoto" height="30px" id="fotoUser"/>
-				</div>
-				<form method="post" th:action="@{/logout}" class="col-1">
+				<form method="post" th:action="@{/logout}" class="col-3">
 			    		<input  type="submit" class="btn btn-dark" id="btnLogout" value="Salir"/>
 				</form>
 			</div>

@@ -1,0 +1,14 @@
+<div th:object="${Usuario}" class="container">
+	<div class="row">
+    	<p class="col-6 subrayado">Roles</p>
+    	<p class="col-6 subrayado">Permisos</p>
+	</div>
+	<div class="row">
+		<div class="col-6">
+			<p th:each="rol : ${Usuario.roles}" class="textoLista" th:text="${rol}"></p><br>
+		</div>
+		<div class="col-6">
+			<p th:each="permiso : ${Usuario.permisos}" class="textoLista" th:text="${permiso}"></p><br>
+		</div>
+	</div>
+</div>

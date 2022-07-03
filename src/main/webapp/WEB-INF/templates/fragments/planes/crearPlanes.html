@@ -30,16 +30,15 @@
 			    	<input id="caractToAdd" type="text" class="col-5" onChange="habilitarBtnCaract()"/>
 			    	<input type="button" onclick="addCaract()" class="col-2 centroForm btn btn-dark" id="btnSendCaract" value="Agregar" disabled/>
 				</div>
-				<input id="caractAddedToSend" type="hidden" th:field="*{caracteristicas}" value = ""/>
 				<div class="row">
 					<div id="tablaCaractPlan">
-							<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
-							<input id="caractAdded" type="hidden" value = ""/>
-							<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
+						<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+						<input id="caractAdded" type="hidden" value = ""/>
+						<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
 					</div>
 				</div>
 				<div class="col">
-			    		<input type="button" onclick="crear('Plane')" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+					<input type="button" onclick="crear('Plane')" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
 				</div>
 			</form>
 		</div>

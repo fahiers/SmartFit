@@ -1,11 +1,21 @@
 .dialogoModal{
-  margin-top: 15%;
+  /*margin-top: 15%;*/
   background-color: var(--naranjoSmart);
+}
+.dialogoModalEdit{
+  background-color: var(--naranjoSmart);
+  margin-left: 25%;
 }
 .contenidoModal{
   background-color: var(--naranjoSmart);
   color:#000000;
   font-size: 1.6vw;
+}
+.contenidoModalEdit{
+  background-color: var(--naranjoSmart);
+  color:#000000;
+  font-size: 1.6vw;
+  width: 120%;
 }
 .cuerpoModalSmall{
   font-size :1.3vw;

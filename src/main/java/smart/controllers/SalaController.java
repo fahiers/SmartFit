@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.cloud.firestore.DocumentReference;
 
 import smart.servicios.CRUDServices;
+import smart.models.Equipo;
 import smart.models.Sala;
 import smart.models.Sede;
 import smart.models.Usuario;
@@ -89,9 +90,8 @@ public class SalaController {
 		Sede sedeObj = sala.getSede().get().get().toObject(Sede.class);
 		if(sedeObj.getSalas() == null) {
 			sedeObj.setSalas(new LinkedList<DocumentReference>());
-		}else {
-			sedeObj.getSalas().add(newDoc);
 		}
+		sedeObj.getSalas().add(newDoc);
 		crudService.update(sedeObj, sedeObj.getId());
 		return crudService.create(sala,sala.getId());
 	}
@@ -100,10 +100,6 @@ public class SalaController {
 	public Object read(@RequestHeader() String id) throws InterruptedException, ExecutionException {
 		return crudService.read(id,Sala.class);
 	}
-	@PostMapping("/updateSala")
-	public String update(@RequestBody Sala sala) throws InterruptedException, ExecutionException {
-		return crudService.update(sala,sala.getId());
-	}
 	@PostMapping("/deleteSala")
 	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
 		this.crudService = new CRUDServices();
@@ -111,6 +107,53 @@ public class SalaController {
 		Sede sede = (Sede) crudService.read(sala.getSede().getId(), Sede.class);
 		sede.getSalas().remove(crudService.getDocRef("salas", id));
 		crudService.update(sede,sede.getId());
+		LinkedList<Equipo> equipos = crudService.getEquiposWhere(crudService.getDocRef("salas", id));
+		for(Equipo eq : equipos) {
+			eq.setSala(null);
+			crudService.update(eq,eq.getId());
+		}
 		return crudService.delete(id,Sala.class);
+	}
+	@PostMapping("/editSala")
+	public ModelAndView edit(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Sala sala = (Sala) crudService.read(id, Sala.class);
+        LinkedList<Object> objSede = crudService.getAllDocs(Sede.class);
+        LinkedList<Sede> sedes = new LinkedList<>();
+        for (Object sede : objSede) {
+			sedes.add((Sede) sede);
+		}
+        model.addAttribute("sedeId",sala.getSede().getId());
+        model.addAttribute("allSedes",sedes);
+        model.addAttribute("Sala", sala);
+        return new ModelAndView("fragments/salas/editarSala");
+	}
+	@PostMapping("/updateSala")
+	public String update(@ModelAttribute Sala sala) throws InterruptedException, ExecutionException {
+		Sala previa = (Sala) crudService.read(sala.getId().split(":")[0], Sala.class);
+		sala.setSede(crudService.getDocRef("sedes", sala.getId().split(":")[1]));
+		sala.setId(sala.getId().split(":")[0]);
+		if(previa.getSede() != sala.getSede()) {
+			Sede sedePrevia = previa.getSede().get().get().toObject(Sede.class);
+			Sede sedeNueva = sala.getSede().get().get().toObject(Sede.class);
+			DocumentReference prev = crudService.getDocRef("salas", previa.getId());
+			DocumentReference nueva = crudService.getDocRef("salas", sala.getId());
+			sedePrevia.getSalas().remove(prev);
+			sedeNueva.getSalas().add(nueva);
+			crudService.update(sedePrevia,sedePrevia.getId());
+			crudService.update(sedeNueva,sedeNueva.getId());
+			
+		}
+		sala.setProfesores(previa.getProfesores());
+ 		String respuesta= crudService.update(sala,sala.getId());
+		return respuesta;
+	}
+	@PostMapping("/extrasSala")
+	public ModelAndView extra(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Sala sala = (Sala) crudService.read(id, Sala.class);
+        LinkedList<Equipo> equipos = crudService.getEquiposWhere(crudService.getDocRef("salas", id));
+        model.addAttribute("allEquipos", equipos);
+        return new ModelAndView("fragments/salas/extrasSala");
 	}
 }

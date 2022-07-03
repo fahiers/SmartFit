@@ -119,13 +119,56 @@ public class ClaseController {
 	public Object read(@RequestHeader() String id) throws InterruptedException, ExecutionException {
 		return crudService.read(id,Clase.class);
 	}
-	@PostMapping("/updateClase")
-	public String update(@RequestBody Clase clase) throws InterruptedException, ExecutionException {
-		return crudService.update(clase,clase.getId());
-	}
 	@PostMapping("/deleteClase")
 	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
 		return crudService.delete(id,Clase.class);
-		
+	}
+	@PostMapping("/editClase")
+	public ModelAndView edit(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Clase clase = (Clase) crudService.read(id, Clase.class);
+		Sala salaOri = (Sala) crudService.read(clase.getSala().getId(), Sala.class);
+		Sede sedeOri = (Sede) crudService.read(salaOri.getSede().getId(), Sede.class);
+        model.addAttribute("Clase", clase);
+        
+        String horarios = "";
+        for(String hor: clase.getHorarios()) {
+        	horarios+=hor +",";
+        }
+        if(horarios != "") {
+            horarios = horarios.substring(0, horarios.length()-1);
+        }
+        LinkedList<Object> objSede = crudService.getAllDocs(Sede.class);
+        LinkedList<Sede> sedes = new LinkedList<>();
+        for (Object sede : objSede) {
+			sedes.add((Sede) sede);
+		}
+        model.addAttribute("allSedes",sedes);
+
+    	LinkedList<Sala> salas = new LinkedList<>();
+    	if(sedeOri.getSalas()!=null) {
+        	for (DocumentReference sala : sedeOri.getSalas()) {
+    			salas.add(sala.get().get().toObject(Sala.class));
+    		}
+    	}
+        model.addAttribute("allSalasOri",salas);
+        model.addAttribute("caractSaved", horarios);
+        model.addAttribute("sedeOriVal", sedeOri.getId());
+        model.addAttribute("salaOriVal", salaOri.getId());
+        return new ModelAndView("fragments/clases/editarClase");
+	}
+	@PostMapping("/updateClase")
+	public String update(@ModelAttribute Clase clase) throws InterruptedException, ExecutionException {
+		clase.setSala(crudService.getDocRef("salas", clase.getId().split(":")[1]));
+		clase.setId(clase.getId().split(":")[0]);
+ 		String respuesta= crudService.update(clase,clase.getId());
+		return respuesta;
+	}
+	@PostMapping("/extrasClase")
+	public ModelAndView extra(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Clase clase = (Clase) crudService.read(id, Clase.class);
+        model.addAttribute("horariosList", clase.getHorarios());
+        return new ModelAndView("fragments/clases/extrasClase");
 	}
 }

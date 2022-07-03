@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form th:action="@{/equipos/updateEquipo}" method="post" id="formEditClase" th:object="${Equipo}" class="container cuadroBNS col-12 formCreate">
+			<div class="row">
+					<p id="addEquipoP" class="col tituloForm">Añadir Equipo</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomEquipo" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Tipo</p>
+					<select th:field="*{tipo}" class="col-7">
+					    <option th:value="Musculacion" th:text="Musculacion"></option>
+					    <option th:value="Fitness" th:text="Fitness"></option>
+					    <option th:value="Yoga" th:text="Yoga"></option>
+					    <option th:value="Step" th:text="Step"></option>
+					    <option th:value="Boxeo" th:text="Boxeo"></option>
+					    <option th:value="Colchonetas" th:text="Colchonetas"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Estado</p>
+					<select th:field="*{estado}" class="col-7">
+					    <option th:value="Nuevo" th:text="Nuevo"></option>
+					    <option value="Buen Estado">Buen Estado</option>
+					    <option th:value="Desgastado" th:text="Desgastado"></option>
+					    <option th:value="Dañado" th:text="Dañado"></option>
+					    <option value="No Utilizable">No Utilizable</option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Sede</p>
+					<select th:value="${sedeOriVal}" id="selectSedeclase" class="col-7" onChange="getMisSalasClase(this.options[this.selectedIndex].value)">
+						<option value="" selected disabled hidden>Seleccione una sede</option>
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+				</div>
+				<div id="selectSalasClase" class="row">
+			    	<p class="col-3">Sala</p>
+					<select th:value="${salaOriVal}" id="selectPrevioSalaenId" th:if="${not #lists.isEmpty(allSalasOri)}" class="col-7" onChange="setSalaEnId()">
+					    <option th:each="sala : ${allSalasOri}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+					</select>
+				</div>
+			<input id="idplusSala" type="hidden" th:field="*{id}" class="col-8" value=""/>
+			<input id="salaEnId" type="hidden" th:value="${salaOriVal}"/>
+		</form>
+	</body>
+</html>

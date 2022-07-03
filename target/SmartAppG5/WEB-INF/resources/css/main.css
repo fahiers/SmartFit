@@ -85,3 +85,17 @@ footer {
 #selectSede{
 	margin-right: 0.5%;
 }
+#selectHora{
+	padding-right: 0;
+}
+
+#tituloFiltros{
+	font-size: 3vw;
+}
+#divFiltrosReporte{
+	padding-bottom: 1vw;
+}
+.btnReport{
+	margin-bottom: 1%;
+	margin-left: 5%;
+}

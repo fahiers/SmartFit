@@ -9,6 +9,10 @@
 			</div>
 			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
 			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<div th:with="tipoEdit='Plan'">
+				<div id="modalEdicion" th:replace="fragments/modals/modalEdicion :: modalEdicion"></div>
+				<div id="modalExtras" th:replace="fragments/modals/modalExtras :: modalExtras"></div>
+			</div>
 			<div th:if="${not #lists.isEmpty(allPlanes)}">
 			<p id="verSedesP" class="col tituloVer">Planes Registrados</p>
 		    <table class="table table-dark tablaVer" id="tablaPlanes">
@@ -25,8 +29,8 @@
 		            <td th:text="${'$' + plan.mensualidad}"></td>
 		            <td th:text="${'$' + plan.mantenimiento}"></td>
 					<td colspan="3">
-						<button th:id="${'Plan:'+plan.id}" type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Caracteristicas</button>
-						<button th:id="${'Plan:'+plan.id}" type="button" class="btn btn-secondary btnVerEdit">Editar</button>
+						<button th:id="${'Plan:'+plan.id}" onclick="extras(this.id)"type="button" class="btn btn-warning btnverExtras btnVerRyP">Ver Caracteristicas</button>
+						<button th:id="${'Plan:'+plan.id}" onclick="edit(this.id)"type="button" class="btn btn-secondary btnVerEdit">Editar</button>
 						<button th:id="${'Plan:'+plan.id}" onclick="delet(this.id)" type="button" class="btn btn-danger btnVerDel">Borrar</button>
 					</td>
 		        </tr>

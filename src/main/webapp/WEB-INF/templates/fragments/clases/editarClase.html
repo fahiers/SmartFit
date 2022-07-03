@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form th:action="@{/clases/updateClase}" method="post" id="formEditClase" th:object="${Clase}" class="container cuadroBNS col-12 formCreate">
+			<div class="row">
+					<p id="addClaseP" class="col tituloForm">Editar Clase</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomClase" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+					<p class="col-3">Duracion</p> <input id="inDurClase" type="text" class="col-7" th:field="*{duracion}" required/>
+				</div>
+				<div class="row">
+					<p class="col-3">Descripcion</p> <input id="inDescClase" type="text" class="col-7" th:field="*{descripcion}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Sede</p>
+					<select th:value="${sedeOriVal}" id="selectSedeclase" class="col-7" onChange="getMisSalasClase(this.options[this.selectedIndex].value)">
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+				</div>
+				<div id="selectSalasClase" class="row">
+			    	<p class="col-3">Sala</p>
+					<select th:value="${salaOriVal}" id="selectPrevioSalaenId" th:if="${not #lists.isEmpty(allSalasOri)}" class="col-7" onChange="setSalaEnId()">
+					    <option th:each="sala : ${allSalasOri}" th:value="${sala.id}" th:text="${sala.nombre}"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Horarios</p>
+					<select id="selectDia" class="col-3" onChange="habilitarBtnHorario()">
+					    <option value="0" >Dia</option>
+					    <option value="Lunes">Lunes</option>
+					    <option value="Martes">Martes</option>
+					    <option value="Miércoles">Miércoles</option>
+					    <option value="Jueves" >Jueves</option>
+					    <option value="Viernes" >Viernes</option>
+					    <option value="Sábado" >Sábado</option>
+					    <option value="Domingo" >Domingo</option>
+					</select>
+					<input class="col-2" type="time" id="selectHora" min="08:00" max="19:00" onChange="habilitarBtnHorario()" required>
+			    	<input type="button" onclick="addHorario()" class="col-2 centroForm btn btn-dark" id="btnSendHorario" value="Agregar" disabled/>
+				</div>
+				<input id="caractAddedToSend" type="hidden" th:field="*{horarios}" value = ""/>
+				<div class="row">
+					<div id="tablaCaractClase">
+						<div th:if="${not #lists.isEmpty(Clase.horarios)}">
+							<p id="caractAddLabel" class="col-12 text-center"> Horarios Añadidos</p>
+							<input id="caractAdded" type="hidden" th:value = "${caractSaved}" class="col-5"/>
+							<ul th:each="caract : ${Clase.horarios}" id="ulCaract">
+							  <li th:text="${caract}"></li>
+							</ul>
+						</div>
+						<div th:unless="${not #lists.isEmpty(Clase.horarios)}">
+							<p id="caractAddLabel" class="col-12 text-center"> Horarios Añadidos</p>
+							<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
+						</div>
+					</div>
+				</div>
+			<input id="idplusSala" type="hidden" th:field="*{id}" class="col-8" value=""/>
+			<input id="salaEnId" type="hidden" th:value="${salaOriVal}"/>
+		</form>
+	</body>
+</html>

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.cloud.firestore.DocumentReference;
 
 import smart.servicios.CRUDServices;
+import smart.models.Equipo;
 import smart.models.Plane;
 import smart.models.Sala;
 import smart.models.Sede;
@@ -93,13 +94,36 @@ public class PlaneController {
 	public Object read(@RequestHeader() String id) throws InterruptedException, ExecutionException {
 		return crudService.read(id,Plane.class);
 	}
-	@PostMapping("/updatePlan")
-	public String update(@RequestBody Plane plan) throws InterruptedException, ExecutionException {
-		return crudService.update(plan,plan.getId());
-	}
 	@PostMapping("/deletePlan")
 	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
 		return crudService.delete(id,Plane.class);
 		
+	}
+
+	@PostMapping("/editPlan")
+	public ModelAndView edit(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Plane planes = (Plane) crudService.read(id, Plane.class);
+        model.addAttribute("Plan", planes);
+        String caract = "";
+        for(String car: planes.getCaracteristicas()) {
+        	caract+=car +",";
+        }
+        caract = caract.substring(0, caract.length()-2);
+        System.out.println(caract);
+        model.addAttribute("caractSaved", caract);
+        return new ModelAndView("fragments/planes/editarPlan");
+	}
+	@PostMapping("/updatePlan")
+	public String update(@ModelAttribute Plane plan) throws InterruptedException, ExecutionException {
+ 		String respuesta= crudService.update(plan,plan.getId());
+		return respuesta;
+	}
+	@PostMapping("/extrasPlan")
+	public ModelAndView extra(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Plane plan = (Plane) crudService.read(id, Plane.class);
+        model.addAttribute("caractList", plan.getCaracteristicas());
+        return new ModelAndView("fragments/planes/caractAdded");
 	}
 }

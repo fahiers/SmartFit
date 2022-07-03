@@ -14,7 +14,7 @@
 					<p id="addUserP" class="col tituloForm">Añadir Usuario</p>
 				</div>
 				<div class="row">
-					<p class="col-2">Nombre</p> <input id="AddUserNombre"type="text" class="col-8" th:field="*{nombre}" required/>
+					<p class="col-2">Nombre</p> <input id="AddUserNombre"type="text" class="col-8" th:field="*{nombre}" th:text="*{nombre}"required/>
 				</div>
 				<div class="row">
 			    	<p class="col-2">Apellido</p> <input id="AddUserApellido" type="text" class="col-8" th:field="*{apellido}" required />

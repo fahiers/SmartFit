@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<div class="bodyFragments" th:fragment="crearEquipo" >
+			<div th:with="msjCabezeraModal='Guardando Equipo',msjCuerpoModal='Espere un Momento'">
+				<div id="modalCargando" th:replace="fragments/modals/modalCargando :: modalCargando"></div>
+			</div>
+			<div id="modalRegistroOk" th:replace="fragments/modals/registroOk :: modalRegistroOk"></div>
+			<div id="modalRegistroKo" th:replace="fragments/modals/registroKo :: modalRegistroKo"></div>
+			<form th:action="@{/equipos/addEquipo}" method="post" id="formCrearEquipo" th:object="${newEquipo}" class="container cuadroBNS col-5 formCreate">
+				<div class="row">
+					<p id="addEquipoP" class="col tituloForm">Añadir Equipo</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomEquipo" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Tipo</p>
+					<select th:field="*{tipo}" class="col-7">
+					    <option th:value="Musculacion" th:text="Musculacion"></option>
+					    <option th:value="Fitness" th:text="Fitness"></option>
+					    <option th:value="Yoga" th:text="Yoga"></option>
+					    <option th:value="Step" th:text="Step"></option>
+					    <option th:value="Boxeo" th:text="Boxeo"></option>
+					    <option th:value="Colchonetas" th:text="Colchonetas"></option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Estado</p>
+					<select th:field="*{estado}" class="col-7">
+					    <option th:value="Nuevo" th:text="Nuevo"></option>
+					    <option value="Buen Estado">Buen Estado</option>
+					    <option th:value="Desgastado" th:text="Desgastado"></option>
+					    <option th:value="Dañado" th:text="Dañado"></option>
+					    <option value="No Utilizable">No Utilizable</option>
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Sede</p>
+					<select id="selectSedeclase" class="col-7" onChange="getMisSalasClase(this.options[this.selectedIndex].value)">
+						<option value="" selected disabled hidden>Seleccione una sede</option>
+					    <option th:each="sede : ${allSedes}" th:value="${sede.id}" th:text="${sede.nombre}"></option>
+					</select>
+				</div>
+				<div id="selectSalasClase" class="row">
+			    	<p class="col-3">Sala</p>
+					<select th:field="*{id}" class="col-7" disabled>
+					    <option th:value="0"> Seleccione una Sede Primero</option>
+					</select>
+				</div>
+				<input id="salaEnId" type="hidden" th:field="*{id}" value=""/>
+				<div class="col">
+			    		<input type="button" onclick="crear('Equipo')" class="col centroForm btn btn-dark btnSendForm" id="btnSend" value="Ingresar"/>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

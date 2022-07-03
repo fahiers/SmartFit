@@ -8,7 +8,10 @@ import org.springframework.data.annotation.Id;
 
 import com.google.cloud.firestore.DocumentReference;
 
+import lombok.ToString;
+
 @Entity
+@ToString
 public class Equipo {
 	@Id
 	private String id;

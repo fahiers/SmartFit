@@ -45,6 +45,22 @@
             <th:block th:case="'planes:ver'">
 				<div id="divReplaceVerPlanes" th:replace="fragments/planes/verPlanes :: verPlanes"></div>
             </th:block>
+            <th:block th:case="'clases:crear'">
+				<div id="divReplaceCrearClases" th:replace="fragments/clases/crearClases :: crearClase"></div>
+            </th:block>
+            <th:block th:case="'clases:ver'">
+				<div id="divReplaceVerClases" th:replace="fragments/clases/verClases :: verClases"></div>
+            </th:block>
+            
+            <th:block th:case="'equipos:crear'">
+				<div id="divReplaceCrearEquipos" th:replace="fragments/equipos/crearEquipo :: crearEquipo"></div>
+            </th:block>
+            <th:block th:case="'equipos:ver'">
+				<div id="divReplaceVerEquipos" th:replace="fragments/equipos/verEquipos :: verEquipos"></div>
+            </th:block>
+            <th:block th:case="'reportes:ver'">
+				<div id="divReplaceVerReportes" th:replace="fragments/reportes/reportes :: reportes"></div>
+            </th:block>
         </th:block>
 	</body>
 	<footer>

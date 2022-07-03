@@ -1,0 +1,93 @@
+#logo{
+  margin-top: 1cm;
+  margin-left: 2cm;
+  height: 2cm;
+  width: 5.5cm;
+  opacity: 0.5;
+}
+.contenedor{
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 1cm;
+  padding-left: 1cm;
+  width: 90%;
+}
+.row{
+  display: flex;
+  margin-bottom: 0.5cm;
+  flex-wrap: wrap;
+}
+.col{
+  flex:1 0 0%;
+}
+.col-2{
+  width: 15%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+  flex:0 0 auto;
+}
+.col-3{
+  width: 25%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+  flex:0 0 auto;
+}
+.col-6{
+  flex: 0 0 auto;
+  width: 50%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+}
+
+.col-7{
+  width: 58.3%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+  flex:0 0 auto;
+}
+.col-8{
+  width: 66%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+  flex:0 0 auto;
+}
+.col-9{
+  flex:0 0 auto;
+  width: 75%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+}
+.col-12{
+  flex: 0 0 auto;
+  width: 100%;
+  padding-left: 0.5cm;
+  padding-right: 0.5cm;
+}
+.textoInicial{
+  text-align: center;
+}
+table{
+  text-align: left;
+}
+.sinRegistros{
+  text-align: 
+}
+.textoInicial{
+  margin-top: 0.1cm;
+}
+#pReporte{
+  font-size: 24px;
+}
+#pdesdeHasta,#pSede{
+  font-size: 20px;
+}
+.nombreTrabajador{
+  font-size: 18px;
+  text-decoration: underline;
+  font-weight:bold;
+  color:#fcb823;
+}
+.registrosUser{
+   border: 2px solid #8a8b8f;
+  margin-bottom: 1.5cm;
+}

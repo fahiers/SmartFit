@@ -13,9 +13,70 @@
 				   document.getElementById('nom').value+':'+
 				   document.getElementById('sur').value).toLowerCase();
 		};
-		function addCaract() {
-			var url = "/SmartAppG5/planes/addCaract";
-			var caractNew=document.getElementById('caractToAdd').value;
+		function setSalaEnId(){
+			var select = document.getElementById('selectPrevioSalaenId');
+			document.getElementById('salaEnId').value = select.options[select.selectedIndex].value;
+		};
+		function habilitarBtnCaract(){
+			if(document.getElementById('caractToAdd').value == ""){
+				document.getElementById('btnSendCaract').disabled = true;
+			} else {
+				document.getElementById('btnSendCaract').disabled = false;
+			}
+		}
+		function activarBtnReporte(){
+			if(document.getElementById('desde').value =="" || document.getElementById('hasta').value ==""){
+				document.getElementById('btnEmitirSede').disabled = true;
+				document.getElementById('btnEmitirUser').disabled = true;
+			}
+			else if(document.getElementById('selectSedeclase').value == ""){
+				document.getElementById('btnEmitirSede').disabled = true;
+				document.getElementById('btnEmitirUser').disabled = true;
+				document.getElementById('selectUsers').disabled = true;
+			}
+			else {
+				var datosDesde =document.getElementById('desde').value.split('-');
+				var datosHasta =document.getElementById('hasta').value.split('-');
+				var dateDesde = new Date(datosDesde[0], datosDesde[1] - 1, datosDesde[2]); 
+				var dateHasta = new Date(datosHasta[0], datosHasta[1] - 1, datosHasta[2]);
+				var hoy = new Date();
+				if(dateDesde>hoy || dateHasta>hoy){
+					document.getElementById('btnEmitirSede').disabled = true;
+					document.getElementById('btnEmitirUser').disabled = true;
+				}
+				else {
+					document.getElementById('btnEmitirSede').disabled = false;
+					if(document.getElementById('selectUsers').value == ""){
+						document.getElementById('selectUsers').disabled = false;
+						document.getElementById('btnEmitirUser').disabled = true;
+					}
+					else if(document.getElementById('selectUsers').value == "0"){
+						document.getElementById('btnEmitirUser').disabled = true;
+						document.getElementById('selectUsers').disabled = true;
+					}else {
+						document.getElementById('selectUsers').disabled = false;
+						document.getElementById('btnEmitirUser').disabled = false;
+					}
+				}
+			}
+		}
+		function modificarDesde(){
+			console.log(document.getElementById('desde').value);
+			document.getElementById('hasta').min =document.getElementById('desde').value;
+			document.getElementById('hasta').value ="";
+			activarBtnReporte();
+		}
+		function habilitarBtnHorario(){
+			if(document.getElementById('selectDia').value == "0" || document.getElementById('selectHora').value ==""){
+				document.getElementById('btnSendHorario').disabled = true;
+			} else {
+				document.getElementById('btnSendHorario').disabled = false;
+			}
+		}
+		function addHorario() {
+			var url = "/SmartAppG5/clases/addHorario";
+			var caractNew=document.getElementById('selectDia').value + " " +document.getElementById('selectHora').value;
+			console.log("/"+document.getElementById('selectHora').value+"/")
 			var caracteristicas=document.getElementById('caractAdded').value;
 			var dataReq= {
 					"newC": caractNew,
@@ -29,8 +90,64 @@
 		        cache: false,
 		        timeout: 600000,
 		        success: function (data) {
+		  			document.getElementById("selectDia").value="0";
+		  			document.getElementById("selectHora").value="";
+					document.getElementById('btnSendHorario').disabled = true;
+		            $("#tablaCaractClase").html(data);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+		function addCaract() {
+			var url = "/SmartAppG5/planes/addCaract";
+			var caractNew=document.getElementById('caractToAdd').value;
+			var caracteristicas=document.getElementById('caractAdded').value;
+			console.log(caractNew);
+			console.log(caracteristicas);
+			var dataReq= {
+					"newC": caractNew,
+					"caract" : caracteristicas
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
 		  			document.getElementById("caractToAdd").value="";
+					document.getElementById('btnSendCaract').disabled = true;
 		            $("#tablaCaractPlan").html(data);
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+		function emitirReporte(tipo) {
+        	$('#modalCargando').modal('show');
+        	var url = "/SmartAppG5/reportes/reporte";
+       		dataReq={
+        			"sede":document.getElementById("selectSedeclase").value,
+        			"user":document.getElementById("selectUsers").value,
+        			"desde":document.getElementById("desde").value,
+        			"hasta":document.getElementById("hasta").value,
+        			"tipo":tipo
+        		};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		  			document.getElementById("data").value=data;
+		        	$('#modalCargando').modal('hide');
+		        	$('#descargarPdf').modal('show');
 		        },
 		        error: function (e) {
 		        	console.log("Error : "+e);
@@ -59,7 +176,30 @@
 		        }
 		    });
         };
-        
+        function getMisSalasClase(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/clases/changeSede";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#selectSalasClase").html(data);
+		        	$('#modalCargando').modal('hide');
+					var select = document.getElementById('selectPrevioSalaenId');
+					document.getElementById('salaEnId').value = select.options[0].value;
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
         function getMisSalas(id) {
         	$('#modalCargando').modal('show');
 			var url = "/SmartAppG5/miSede/changeSede";
@@ -75,6 +215,30 @@
 		        timeout: 600000,
 		        success: function (data) {
 		            $("#divReplaceMiSedeSalas").html(data);
+		        	$('#modalCargando').modal('hide');
+		        },
+		        error: function (e) {
+		        	console.log("Error : "+e);
+		        }
+		    });
+        };
+
+        function getMisUsuarios(id) {
+        	$('#modalCargando').modal('show');
+			var url = "/SmartAppG5/reportes/cargarUsers";
+			var dataReq= {
+					"id": id
+			};
+			$.ajax({
+		        type: "POST",
+		        url: url,
+		        data: dataReq,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		            $("#selectUsers").html(data);
+		            activarBtnReporte();
 		        	$('#modalCargando').modal('hide');
 		        },
 		        error: function (e) {
@@ -230,6 +394,58 @@
 				        }
 				    });
 			    break;
+			  	case "Clase":
+		  			document.getElementById("inNomClase").value="";
+		  			document.getElementById("inDurClase").value="";
+		  			document.getElementById("inDescClase").value="";
+		  			document.getElementById("selectDia").value="0";
+		  			document.getElementById("selectHora").value="";
+		  			document.getElementById("selectSedeclase").value="";
+		  			$.ajax({
+				        type: "POST",
+				        url: "/SmartAppG5/clases/getDefault",
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#tablaCaractClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+					var url = "/SmartAppG5/clases/getDefaultSala";
+					$.ajax({
+				        type: "POST",
+				        url: url,
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#selectSalasClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
+			  	case "Clase":
+		  			document.getElementById("inNomEquipo").value="";
+					var url = "/SmartAppG5/clases/getDefaultSala";
+					$.ajax({
+				        type: "POST",
+				        url: url,
+				        dataType: 'text',
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				            $("#selectSalasClase").html(data);
+				        },
+				        error: function (e) {
+				        	console.log("Error : "+e);
+				        }
+				    });
+			    break;
 			} 
 		};
 		function crear(parametro){
@@ -257,6 +473,13 @@
 			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
 	    			urlForm = "/SmartAppG5/planes/addPlan";
 	    			parametro = "Plan";
+			    break;
+			  	case "Clase":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+	    			urlForm = "/SmartAppG5/clases/addClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/addEquipo";
 			    break;
 			}
 
@@ -289,7 +512,72 @@
         	document.getElementById("modalCargando").classList= "modal";
         	$('#modalCargando').modal('hide');
 		};
-		
+		function update(parametro){
+			//Cargar modal
+        	$('#modalEdicion').modal('hide');
+        	$('#modalCargando').modal('show');
+
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+        	var form = "#formEdit" + parametro;
+		    
+		    //Switch Parametro
+		    switch(parametro) {
+		  		case "Usuario":
+	    			var result = setRolesyPermisos();
+	    			document.getElementById("AddUserRut").value =$("#AddUserRut").val() + ":" + $("#AddUserSede").val();
+	    			urlForm = "/SmartAppG5/usuarios/updateUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/updateSede";
+			    break;
+			  	case "Sala":
+					document.getElementById("AddSedeIdSede").value =$("#AddSedeIdSede").val() + ":" + $("#sedeIdSelect").val();
+	    			urlForm = "/SmartAppG5/salas/updateSala";
+			    break;
+			  	case "Plane":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+	    			urlForm = "/SmartAppG5/planes/updatePlan";
+	    			parametro = "Plan";
+			    break;
+			  	case "Clase":
+			  		document.getElementById("caractAddedToSend").value = document.getElementById("caractAdded").value;
+					document.getElementById("idplusSala").value =$("#idplusSala").val() + ":" + $("#salaEnId").val();
+	    			urlForm = "/SmartAppG5/clases/updateClase";
+			    break;
+			  	case "Equipo":
+					document.getElementById("idplusSala").value =$("#idplusSala").val() + ":" + $("#salaEnId").val();
+	    			urlForm = "/SmartAppG5/equipos/updateEquipo";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataForm=$(form).serialize();
+			console.log(dataForm);
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataForm,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var msj = parametro + " con id: " + data.split("/")[0] + " actualizado correctamente el " + data.split("/")[1] + " a las : " + data.split("/")[2] + " Para visualizar cambios en tabla actualize la seccion";
+			        var head =parametro + " actualizado";
+		        	document.getElementById("labelRegistroOkHead").innerHTML = head;
+		        	document.getElementById("mensajeInternoModalOk").innerHTML =msj;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroOk').modal('show');
+		        	reset(parametro);
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelRegistroKoHead").innerHTML = "Error al Actualizar";
+		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+		};
 		function delet(parametro){
 			//Cargar modal
         	$('#modalCargando').modal('show');
@@ -310,6 +598,12 @@
 			    break;
 			  	case "Plan":
 	    			urlForm = "/SmartAppG5/planes/deletePlan";
+			    break;
+			  	case "Clase":
+	    			urlForm = "/SmartAppG5/clases/deleteClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/deleteEquipo";
 			    break;
 			}
 
@@ -343,6 +637,124 @@
 		        	document.getElementById("mensajeInternoModalKo").innerHTML ="Error :" + e;
 		        	$('#modalCargando').modal('hide');
 		        	$('#modalRegistroKo').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
+		function edit(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
+
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+		    
+		    //Switch Parametro
+		    switch(parametro.split(":")[0]) {
+		  		case "Usuario":
+	    			urlForm = "/SmartAppG5/usuarios/editUser";
+			    break;
+			  	case "Sede":
+	    			urlForm = "/SmartAppG5/sedes/editSede";
+			    break;
+			  	case "Sala":
+	    			urlForm = "/SmartAppG5/salas/editSala";
+			    break;
+			  	case "Plan":
+	    			urlForm = "/SmartAppG5/planes/editPlan";
+			    break;
+			  	case "Clase":
+	    			urlForm = "/SmartAppG5/clases/editClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/editEquipo";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataRequest={
+					"id" : parametro.split(":")[1]
+			}
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataRequest,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+			        var head ="Editando " + parametro.split(":")[0] + " " +parametro.split(":")[1];
+		        	document.getElementById("labelEdicion").innerHTML = head;
+		        	$('#datosEdicion').html(data);
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalEdicion').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelEdicion").innerHTML = "Error al Editar";
+		        	document.getElementById("labelError").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalEdicion').modal('show');
+		        }
+		    });
+        	document.getElementById("modalCargando").classList= "modal";
+        	$('#modalCargando').modal('hide');
+		};
+		function extras(parametro){
+			//Cargar modal
+        	$('#modalCargando').modal('show');
+
+        	//cargar datos comunes Forms
+		    var urlForm = "";
+	        var head ="";
+		    
+		    //Switch Parametro
+		    switch(parametro.split(":")[0]) {
+		  		case "Usuario":
+					head ="Roles y Permisos Usuarios";
+	    			urlForm = "/SmartAppG5/usuarios/extrasUser";
+			    break;
+			  	case "Sede":
+					head ="Salas Actuales de la Sede";
+	    			urlForm = "/SmartAppG5/sedes/extrasSede";
+			    break;
+			  	case "Sala":
+					head ="Equipos Actuales de la Sala";
+	    			urlForm = "/SmartAppG5/salas/extrasSala";
+			    break;
+			  	case "Plan":
+					head ="Caracteristicas Plan";
+	    			urlForm = "/SmartAppG5/planes/extrasPlan";
+			    break;
+			  	case "Clase":
+					head ="Horarios Clase";
+	    			urlForm = "/SmartAppG5/clases/extrasClase";
+			    break;
+			  	case "Equipo":
+	    			urlForm = "/SmartAppG5/equipos/extrasEquipo";
+			    break;
+			}
+
+			//Serializar y Enviar
+		    var dataRequest={
+					"id" : parametro.split(":")[1]
+			}
+			$.ajax({
+		        type: "POST",
+		        url: urlForm,
+		        data: dataRequest,
+		        dataType: 'text',
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	document.getElementById("labelExtra").innerHTML = head;
+		        	$('#datosExtra').html(data);
+		        	$('#modalCargando').modal('hide');
+		        	$('#modalExtras').modal('show');
+		        },
+		        error: function (e) {
+		        	document.getElementById("labelExtra").innerHTML = "Error al Cargar Informacion";
+		        	document.getElementById("labelError").innerHTML ="Error :" + e;
+		        	$('#modalCargando').modal('hide');
 		        }
 		    });
         	document.getElementById("modalCargando").classList= "modal";

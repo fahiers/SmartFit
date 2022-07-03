@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form th:action="@{/sedes/updateSede}" method="post" id="formEditSede" th:object="${Sede}" class="container cuadroBNS col-12 formCreate">
+			<div class="row">
+					<p id="addSedeP" class="col tituloForm">Editar Sede</p>
+				</div>
+				<div class="row">
+					<p class="col-2">Nombre</p> <input id="inNombreSede" type="text" class="col-8" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Direccion</p> <input id="inDirSede" type="text" class="col-8" th:field="*{direccion}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-2">Region</p>
+					<select th:field="*{region}" class="col-8">
+					    <option  th:each="region : ${regiones}" th:value="${region}" th:text="${region}"th:selected="${regActual==regionStat.index}" >
+					</select>
+				</div>
+				<div class="row">
+			    	<p class="col-2">Aforo</p> <input id="inAfoSede" type="number" class="col-8" th:field="*{aforo}" required />
+				</div>
+				<input type="hidden" th:field="*{id}" class="col-8" value=""/>
+		</form>
+	</body>
+</html>

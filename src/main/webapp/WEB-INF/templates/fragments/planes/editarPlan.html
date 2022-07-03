@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<form th:action="@{/planes/updatePlan}" method="post" id="formEditPlane" th:object="${Plan}" class="container cuadroBNS col-12 formCreate">
+			<div class="row">
+					<p id="addPlanP" class="col tituloForm">Editar Plan</p>
+				</div>
+				<div class="row">
+					<p class="col-3">Nombre</p> <input id="inNomPlan" type="text" class="col-7" th:field="*{nombre}" required/>
+				</div>
+				<div class="row">
+			    	<p class="col-3">Inscripcion</p> <input id="inInsPLan" type="number" class="col-7" th:field="*{inscripcion}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Mensualidad</p> <input id="inMenPLan" type="number" class="col-7" th:field="*{mensualidad}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Mantenimiento</p> <input id="inMantPLan" type="number" class="col-7" th:field="*{mantenimiento}" required />
+				</div>
+				<div class="row">
+			    	<p class="col-3">Caracteristicas</p>
+			    	<input id="caractToAdd" type="text" class="col-5" onChange="habilitarBtnCaract()"/>
+			    	<input type="button" onclick="addCaract()" class="col-2 centroForm btn btn-dark" id="btnSendCaract" value="Agregar" disabled/>
+				</div>
+				<input id="caractAddedToSend" type="hidden" th:field="*{caracteristicas}" value = ""/>
+				<div class="row">
+					<div id="tablaCaractPlan">
+						<input id="caractAdded" type="hidden" th:value="${caractSaved}" class="col-5"/>
+						<div th:if="${not #lists.isEmpty(Plan.caracteristicas)}">
+							<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+							<ul th:each="caract : ${Plan.caracteristicas}" id="ulCaract">
+							  <li th:text="${caract}"></li>
+							</ul>
+						</div>
+						<div th:unless="${not #lists.isEmpty(Plan.caracteristicas)}">
+							<input id="caractAdded" type="hidden" value = "" class="col-5"/>
+							<p id="caractAddLabel" class="col-12 text-center"> Caracteristicas Añadidas</p>
+							<p id="verCaractP" class="col" th:text="${'No hay caracteristicas registradas'}"></p>
+						</div>
+					</div>
+				</div>
+			<input type="hidden" th:field="*{id}" class="col-8" value=""/>
+		</form>
+	</body>
+</html>

@@ -44,6 +44,7 @@ public class SedeController {
         Sede newSede = new Sede();
         newSede.setSalas(new LinkedList<DocumentReference>());
         model.addAttribute("newSede", newSede);
+        model.addAttribute("regiones", this.getRegiones());
         return new ModelAndView("home");
 	}
 	
@@ -72,10 +73,6 @@ public class SedeController {
 	public Object read(@RequestHeader() String id) throws InterruptedException, ExecutionException {
 		return crudService.read(id,Sede.class);
 	}
-	@PostMapping("/updateSede")
-	public String update(@RequestBody Sede sede) throws InterruptedException, ExecutionException {
-		return crudService.update(sede,sede.getId());
-	}
 	@PostMapping("/deleteSede")
 	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
 		Sede sede = (Sede) crudService.read(id,Sede.class);
@@ -86,5 +83,55 @@ public class SedeController {
 		}
         String respuesta = crudService.delete(id,Sede.class) + "/" + contador;
 		return respuesta;
+	}
+
+	@PostMapping("/editSede")
+	public ModelAndView edit(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Sede sede = (Sede) crudService.read(id, Sede.class);
+        model.addAttribute("Sede", sede);
+        LinkedList<String> regiones = this.getRegiones();
+        model.addAttribute("regActual", this.getRegiones().indexOf(sede.getRegion()));
+        model.addAttribute("regiones", regiones);
+        return new ModelAndView("fragments/sedes/editarSede");
+	}
+	@PostMapping("/updateSede")
+	public String update(@ModelAttribute Sede sede) throws InterruptedException, ExecutionException {
+		sede.setSalas(((Sede) crudService.read(sede.getId(), Sede.class)).getSalas());
+		String respuesta= crudService.update(sede,sede.getId());
+		return respuesta;
+	}
+	@PostMapping("/extrasSede")
+	public ModelAndView extra(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Sede sede = (Sede) crudService.read(id, Sede.class);
+        LinkedList<Sala> salas = new LinkedList<>();
+        if(sede.getSalas() != null) {
+            for (DocumentReference sala : sede.getSalas()) {
+    			salas.add(sala.get().get().toObject(Sala.class));
+    		}
+        }
+        model.addAttribute("allSalas", salas);
+        return new ModelAndView("fragments/sedes/extrasSede");
+	}
+	public LinkedList<String> getRegiones() {
+		LinkedList<String> regiones = new LinkedList<>();
+		regiones.add("I - Región de Tarapacá");
+		regiones.add("II - Región de Antofagasta");
+		regiones.add("III - Región de Atacama");
+		regiones.add("IV - Región de Coquimbo");
+		regiones.add("V - Región de Valparaíso");
+		regiones.add("VI - Región del Libertador General Bernardo O’Higgins");
+		regiones.add("VII - Región del Maule");
+		regiones.add("VIII - Región del Biobío");
+		regiones.add("IX - Región de La Araucanía");
+		regiones.add("X - Región de Los Lagos");
+		regiones.add("XI - Región Aysén del General Carlos Ibáñez del Campo");
+		regiones.add("XII - Región de Magallanes y Antártica Chilena");
+		regiones.add("RM - Región Metropolitana de Santiago");
+		regiones.add("XIV - Región de Los Ríos");
+		regiones.add("XV - Región de Arica y Parinacota");
+		regiones.add("XVI - Región de Ñuble");
+		return regiones;
 	}
 }

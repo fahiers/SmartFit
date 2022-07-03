@@ -35,13 +35,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
    
         http.authorizeRequests().  
-        antMatchers("/index","/").permitAll()  
-        .antMatchers("/admin").hasAuthority("ROLE_ADMIN")  
+        antMatchers("/index","/").permitAll()
+        .antMatchers("/usuarios/*").hasAuthority("ROLE_ADMIN")
+        .antMatchers("/sedes/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/salas/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/planes/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/clases/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/equipos/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/reportes/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI")
+        .antMatchers("/miSede/*").hasAnyAuthority("ROLE_ADMIN","ROLE_PERSONALDTI","ROLE_ENTRENADOR")
         .antMatchers("/home").authenticated()
-        .and()  
+        .and()
         .formLogin().failureHandler(authenticationFailureHandler())
         .loginPage("/login")
-        .and()  
+        .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/home");

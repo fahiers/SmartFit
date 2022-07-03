@@ -1,0 +1,31 @@
+<div th:if="${not #lists.isEmpty(allSalas)}" class="container">
+	<div class="row">
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Nombre'}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Tipo'}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${'Aforo'}"></p><br>
+		</div>
+	</div>
+	<div th:each="sala : ${allSalas}" class="row">
+		<div class="col-4">
+			<p  class="textoLista" th:text="${sala.nombre}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${sala.tipo}"></p><br>
+		</div>
+		<div class="col-4">
+			<p  class="textoLista" th:text="${sala.aforo}"></p><br>
+		</div>
+	</div>
+</div>
+<div th:unless="${not #lists.isEmpty(allSalas)}" class="container">
+	<div class="row">
+		<div class="col-12">
+			<p  class="textoLista" th:text="${'Sede no tiene salas que mostrar'}"></p><br>
+		</div>
+	</div>
+</div>

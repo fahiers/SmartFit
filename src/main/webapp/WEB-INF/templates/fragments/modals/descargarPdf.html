@@ -1,0 +1,20 @@
+<div th:fragment="descargarPdf" class="modal fade modalNotification" id="descargarPdf" tabindex="-1" aria-labelledby="descargarPdf" aria-hidden="true">
+  <div class="modal-dialog dialogoModal">
+    <div class="modal-content contenidoModal">
+      <div class="modal-header cabezeraModal">
+       	 <p id="labelRegistroOkHead"> Archivo creado</p>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body cuerpoModalSmall">
+		<form class="container row" th:action="@{/reportes/pdf}" method="post">
+			<input name="data" type="hidden" id="data">
+			<p id="mensajeInternoModalOk" class="col-8" >Click para descargar Reporte -></p>
+			<input class="btn btn-dark btnDescargarPdf col-3" value="Descargar" type="submit">
+		</form>
+      </div>
+		<div class="modal-footer piesModal">
+		 <button type="button" class="btn btn-dark btnModalFoot" data-bs-dismiss="modal" aria-label="Close">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

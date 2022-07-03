@@ -1,5 +1,6 @@
 package smart.controllers;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.cloud.firestore.DocumentReference;
 
 import smart.servicios.CRUDServices;
+import smart.models.Registro;
+import smart.models.Sala;
 import smart.models.Sede;
 import smart.models.Usuario;
 import smart.security.UserPrincipal;
@@ -82,12 +85,69 @@ public class UserController {
 	public Object read(@RequestHeader() String id) throws InterruptedException, ExecutionException {
 		return crudService.read(id,Usuario.class);
 	}
+	@PostMapping("/editUser")
+	public ModelAndView edit(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Usuario user = (Usuario) crudService.read(id, Usuario.class);
+        model.addAttribute("Usuario", user);
+        LinkedList<Object> objSede = crudService.getAllDocs(Sede.class);
+        LinkedList<Sede> sedes = new LinkedList<>();
+        for (Object sede : objSede) {
+			sedes.add((Sede) sede);
+		}
+        model.addAttribute("allSedes",sedes);
+        model.addAttribute("sedeId",user.getSede().getId());
+        return new ModelAndView("fragments/usuarios/editarUsuario");
+	}
 	@PostMapping("/updateUser")
-	public String update(@RequestBody Usuario user) throws InterruptedException, ExecutionException {
-		return crudService.update(user,user.getRut());
+	public String update(@ModelAttribute Usuario user) throws InterruptedException, ExecutionException {
+		Usuario previo = (Usuario) crudService.read(user.getRut().split(":")[0], Usuario.class);
+		if(user.getPassword().equals("")) user.setPassword(previo.getPassword());
+		else user.setPassword(pass.encode(user.getPassword()));
+		user.setSede(crudService.getDocRef("sedes", user.getRut().split(":")[1]));
+		user.setRut(user.getRut().split(":")[0]);
+		user.setSalaActual(previo.getSalaActual());
+		if(previo.getSalaActual()!= null && previo.getSede() != user.getSede()) {
+			Sala salaPrevia = previo.getSalaActual().get().get().toObject(Sala.class);
+			salaPrevia.getProfesores().remove(crudService.getDocRef("usuarios", previo.getRut()));
+			Registro regObj = new Registro();
+			regObj.setId(crudService.newDoc("registros").getId());
+			regObj.setSala(crudService.getDocRef("salas", salaPrevia.getId()));
+			regObj.setSede(salaPrevia.getSede());
+			regObj.setUsuario(crudService.getDocRef("usuarios", previo.getRut()));
+			regObj.setTipo("Salida");
+			regObj.setFecha(new Date());
+			crudService.update(regObj, regObj.getId());
+			crudService.update(salaPrevia, salaPrevia.getId());
+		}
+		String respuesta= crudService.update(user,user.getRut());
+		return respuesta;
 	}
 	@PostMapping("/deleteUser")
 	public String delete(@RequestParam(name="id") String id) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Usuario userObj = (Usuario) this.crudService.read(id, Usuario.class);
+		if(userObj.getSalaActual() != null) {
+			Sala salaPrevia = (Sala) crudService.read(userObj.getSalaActual().getId(), Sala.class);
+			salaPrevia.getProfesores().remove(crudService.getDocRef("usuarios", userObj.getRut()));
+			Registro regObj = new Registro();
+			regObj.setId(crudService.newDoc("registros").getId());
+			regObj.setSala(crudService.getDocRef("salas", salaPrevia.getId()));
+			regObj.setSede(salaPrevia.getSede());
+			regObj.setUsuario(crudService.getDocRef("usuarios", id));
+			regObj.setTipo("Salida");
+			regObj.setFecha(new Date());
+			crudService.update(regObj, regObj.getId());
+			crudService.update(salaPrevia, salaPrevia.getId());
+		}
 		return crudService.delete(id,Usuario.class);
+	}
+
+	@PostMapping("/extrasUser")
+	public ModelAndView extra(@RequestParam(name="id") String id, Model model) throws InterruptedException, ExecutionException {
+		this.crudService = new CRUDServices();
+		Usuario user = (Usuario) crudService.read(id, Usuario.class);
+        model.addAttribute("Usuario", user);
+        return new ModelAndView("fragments/usuarios/extrasUsuario");
 	}
 }
